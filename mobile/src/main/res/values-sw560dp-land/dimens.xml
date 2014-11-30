@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="margin_list_chooser">128dp</dimen>
+    <dimen name="margin_left_text_chooser_header_title">128dp</dimen>
+</resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="apptheme_primary">#3F51B5</color>
+    <color name="apptheme_primary_dark">#303F9F</color>
+    <color name="apptheme_accent">#FF4081</color>
+
+    <color name="background_window">#eeeeee</color>
+    <color name="background_toolbar_setup">#eeeeee</color>
+
+    <color name="text_gray">#656565</color>
+    <color name="text_gray_dark">#474747</color>
+
+    <color name="selector_light">#50ffffff</color>
+    <color name="selector_light_stroke">#70ffffff</color>
+    <color name="selector_dark">#30000000</color>
+    <color name="selector_dark_stroke">#50000000</color>
+</resources>

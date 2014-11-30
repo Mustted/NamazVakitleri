@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="height_header_chooser">136dp</dimen>
+    <dimen name="height_chooser_bottom_bar">56dp</dimen>
+
+    <dimen name="margin_list_chooser">64dp</dimen>
+    <dimen name="margin_left_text_chooser_header_title">64dp</dimen>
+</resources>

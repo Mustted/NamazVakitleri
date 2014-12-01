@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ViewFlipper;
@@ -26,6 +27,8 @@ public class MainActivity extends ActionBarActivity {
     private static final int FLIPPER_PROGRESS_BAR = 1;
     private static final int FLIPPER_CONTENT = 0;
 
+    private Toolbar mToolbar;
+
     private DatabaseManager dbMan;
     private DiyanetApi api;
 
@@ -44,6 +47,9 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         dbMan = new DatabaseManager(this);
         api = new DiyanetApi();
+
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
 
         mLocations = dbMan.getLocations();
 

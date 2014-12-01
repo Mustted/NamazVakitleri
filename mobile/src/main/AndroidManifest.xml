@@ -21,16 +21,13 @@
         </activity>
 
         <activity
-            android:name=".CountryChooserActivity"
-            android:theme="@style/AppTheme_Setup" />
+            android:name=".CountryChooserActivity" />
 
         <activity
-            android:name=".CityChooserActivity"
-            android:theme="@style/AppTheme_Setup" />
+            android:name=".CityChooserActivity" />
 
         <activity
-            android:name=".CountyChooserActivity"
-            android:theme="@style/AppTheme_Setup" />
+            android:name=".CountyChooserActivity" />
     </application>
 
 </manifest>

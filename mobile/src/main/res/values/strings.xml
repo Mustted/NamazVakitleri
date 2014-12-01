@@ -11,4 +11,13 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
+    <string name="prayer_time_fajr">Fajr</string>
+    <string name="prayer_time_sunrise">Sunrise</string>
+    <string name="prayer_time_dhuhr">Dhuhr</string>
+    <string name="prayer_time_asr">Asr</string>
+    <string name="prayer_time_maghrib">Maghrib</string>
+    <string name="prayer_time_isha">Isha</string>
+
+    <string name="just_now">just now</string>
+
 </resources>

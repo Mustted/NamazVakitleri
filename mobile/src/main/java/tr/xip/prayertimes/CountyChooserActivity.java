@@ -19,7 +19,8 @@ import tr.xip.prayertimes.api.DiyanetApi;
 import tr.xip.prayertimes.api.objects.City;
 import tr.xip.prayertimes.api.objects.Country;
 import tr.xip.prayertimes.api.objects.County;
-import tr.xip.prayertimes.manager.PrefManager;
+import tr.xip.prayertimes.api.objects.Location;
+import tr.xip.prayertimes.db.DatabaseManager;
 
 /**
  * Created by ix on 11/30/14.
@@ -29,7 +30,7 @@ public class CountyChooserActivity extends ActionBarActivity {
     public static final String ARG_CITY = "arg_city";
 
     private DiyanetApi api;
-    private PrefManager prefMan;
+    private DatabaseManager dbMan;
 
     private List<County> mCountiesList = new ArrayList<>();
 
@@ -47,7 +48,7 @@ public class CountyChooserActivity extends ActionBarActivity {
         overridePendingTransition(R.anim.fade_in, R.anim.nothing);
         setContentView(R.layout.activity_list_chooser);
         api = new DiyanetApi();
-        prefMan = new PrefManager(this);
+        dbMan = new DatabaseManager(this);
 
         Intent intent = getIntent();
         mCountry = (Country) intent.getSerializableExtra(ARG_COUNTRY);
@@ -79,8 +80,11 @@ public class CountyChooserActivity extends ActionBarActivity {
     }
 
     private void saveValuesAndExit(County county) {
-        prefMan.setSetupCompleted(true);
-        // TODO: Save values for later use
+        dbMan.addLocation(new Location(
+                mCountry.getId(),
+                mCity.getId(),
+                county != null ? county.getId() : null
+        ));
         startActivity(new Intent(CountyChooserActivity.this, MainActivity.class));
         finish();
     }

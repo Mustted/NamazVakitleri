@@ -53,20 +53,20 @@ public class MainActivity extends ActionBarActivity {
         if (mLocations.size() == 0) {
             startActivity(new Intent(this, CountryChooserActivity.class));
             finish();
+        } else {
+            mFlipper = (ViewFlipper) findViewById(R.id.activity_main_flipper);
+
+            mRecyclerView = (RecyclerView) findViewById(R.id.activity_main_recycler);
+            mLayoutManager = new LinearLayoutManager(this);
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mRecyclerView.addItemDecoration(new DividerItemDecoration(this,
+                    DividerItemDecoration.VERTICAL_LIST));
+
+            if (mPrayerTimes != null)
+                displayPrayerTimes();
+            else
+                new FetchPrayerTimesTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
-
-        mFlipper = (ViewFlipper) findViewById(R.id.activity_main_flipper);
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.activity_main_recycler);
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this,
-                DividerItemDecoration.VERTICAL_LIST));
-
-        if (mPrayerTimes != null)
-            displayPrayerTimes();
-        else
-            new FetchPrayerTimesTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override

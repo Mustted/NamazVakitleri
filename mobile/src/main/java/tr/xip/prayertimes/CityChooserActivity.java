@@ -18,6 +18,7 @@ import tr.xip.prayertimes.apdater.CitiesAdapter;
 import tr.xip.prayertimes.api.DiyanetApi;
 import tr.xip.prayertimes.api.objects.City;
 import tr.xip.prayertimes.api.objects.Country;
+import tr.xip.prayertimes.db.DatabaseManager;
 
 /**
  * Created by ix on 11/30/14.
@@ -26,6 +27,7 @@ public class CityChooserActivity extends ActionBarActivity {
     public static final String ARG_COUNTRY = "arg_country";
 
     private DiyanetApi api;
+    private DatabaseManager dbMan;
 
     private List<City> mCitiesList = new ArrayList<>();
 
@@ -42,6 +44,7 @@ public class CityChooserActivity extends ActionBarActivity {
         overridePendingTransition(R.anim.fade_in, R.anim.nothing);
         setContentView(R.layout.activity_list_chooser);
         api = new DiyanetApi();
+        dbMan = new DatabaseManager(this);
 
         mCountry = (Country) getIntent().getSerializableExtra(ARG_COUNTRY);
 

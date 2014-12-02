@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.widget.ViewFlipper;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import tr.xip.prayertimes.apdater.PrayerTimesAdapter;
@@ -33,6 +35,8 @@ public class MainActivity extends ActionBarActivity {
     private DiyanetApi api;
 
     private List<Location> mLocations = new ArrayList<>();
+    private Location mLocation;
+
     private PrayerTimes mPrayerTimes;
 
     private ViewFlipper mFlipper;
@@ -68,10 +72,13 @@ public class MainActivity extends ActionBarActivity {
             mRecyclerView.addItemDecoration(new DividerItemDecoration(this,
                     DividerItemDecoration.VERTICAL_LIST));
 
+            mLocation = mLocations.get(0);
+
             if (mPrayerTimes != null)
                 displayPrayerTimes();
             else
-                new FetchPrayerTimesTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                new LoadPrayerTimesForTodayTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
         }
     }
 
@@ -99,13 +106,19 @@ public class MainActivity extends ActionBarActivity {
         outState.putSerializable(STATE_PRAYER_TIMES, mPrayerTimes);
     }
 
+    private boolean locationHasCountyValue() {
+        return mLocation.getCountyId() != null;
+    }
+    
     private void displayPrayerTimes() {
-        mAdapter = new PrayerTimesAdapter(this, mPrayerTimes.getPrayerTimesArrayList());
-        if (mRecyclerView != null)
-            mRecyclerView.setAdapter(mAdapter);
+        if (mPrayerTimes != null) {
+            mAdapter = new PrayerTimesAdapter(this, mPrayerTimes.getPrayerTimesArrayList());
+            if (mRecyclerView != null)
+                mRecyclerView.setAdapter(mAdapter);
+        }
     }
 
-    private class FetchPrayerTimesTask extends AsyncTask<Void, Void, Boolean> {
+    private class LoadPrayerTimesForTodayTask extends AsyncTask<Void, Void, Boolean> {
 
         @Override
         protected void onPreExecute() {
@@ -117,19 +130,72 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            Location mLocation = mLocations.get(0);
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+            long now = cal.getTimeInMillis();
+
+            if (locationHasCountyValue())
+                mPrayerTimes = dbMan.getPrayerTimes(
+                        mLocation.getCountryId(),
+                        mLocation.getCityId(),
+                        mLocation.getCountyId(),
+                        now
+                );
+            else
+                mPrayerTimes = dbMan.getPrayerTimes(
+                        mLocation.getCountryId(),
+                        mLocation.getCityId(),
+                        null,
+                        now
+                );
+
+            return mPrayerTimes != null;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            super.onPostExecute(success);
+
+            if (success) {
+                displayPrayerTimes();
+
+            } else {
+                new FetchPrayerTimesTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            }
+
+            if (mFlipper != null)
+                mFlipper.setDisplayedChild(FLIPPER_CONTENT);
+        }
+    }
+
+    private class FetchPrayerTimesTask extends AsyncTask<Void, Void, Boolean> {
+        List<PrayerTimes> mPrayerTimesList;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            if (mFlipper != null)
+                mFlipper.setDisplayedChild(FLIPPER_PROGRESS_BAR);
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
             try {
-                if (mLocation.getCountyId() != null) {
-                    mPrayerTimes = api.getPrayerTimesForCounty(
+                if (locationHasCountyValue()) {
+                    mPrayerTimesList = api.getPrayerTimesForCounty(
                             mLocation.getCountryId(),
                             mLocation.getCityId(),
                             mLocation.getCountyId()
-                    ).get(0);
+                    );
                 } else {
-                    mPrayerTimes = api.getPrayerTimesForCity(
+                    mPrayerTimesList = api.getPrayerTimesForCity(
                             mLocation.getCountryId(),
                             mLocation.getCityId()
-                    ).get(0);
+                    );
                 }
                 return true;
             } catch (Exception e) {
@@ -143,7 +209,20 @@ public class MainActivity extends ActionBarActivity {
             super.onPostExecute(success);
 
             if (success) {
-                displayPrayerTimes();
+                if (locationHasCountyValue())
+                    dbMan.addPrayerTimesByCountyId(
+                            mPrayerTimesList,
+                            mLocation.getCountryId(),
+                            mLocation.getCityId(),
+                            mLocation.getCountyId()
+                    );
+                else
+                    dbMan.addPrayerTimesByCityId(mPrayerTimesList,
+                            mLocation.getCountryId(),
+                            mLocation.getCityId()
+                    );
+
+                new LoadPrayerTimesForTodayTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             } else {
                 // TODO: indicate failure
             }

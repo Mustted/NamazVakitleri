@@ -9,6 +9,8 @@ import java.io.Serializable;
  */
 public class City implements Serializable {
 
+    private int databaseId;
+
     @SerializedName("SehirId")
     private String id;
 
@@ -16,6 +18,12 @@ public class City implements Serializable {
     private String name;
 
     public City(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public City(int databaseId, String id, String name) {
+        this.databaseId = databaseId;
         this.id = id;
         this.name = name;
     }

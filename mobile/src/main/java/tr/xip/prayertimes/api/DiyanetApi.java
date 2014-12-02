@@ -14,9 +14,9 @@ import tr.xip.prayertimes.api.objects.PrayerTimes;
 public class DiyanetApi {
     private static final String API_HOST = "http://ahmeti-namaz-vakitleri.appspot.com";
 
-    List<Country> mCountriesList;
+    private List<Country> mCountriesList;
 
-    DiyanetService service;
+    private DiyanetService service;
 
     public DiyanetApi() {
         RestAdapter restAdapter = new RestAdapter.Builder()

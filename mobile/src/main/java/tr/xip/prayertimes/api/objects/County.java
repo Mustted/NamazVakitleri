@@ -9,6 +9,8 @@ import java.io.Serializable;
  */
 public class County implements Serializable {
 
+    private int databaseId;
+
     @SerializedName("IlceId")
     private String id;
 
@@ -17,6 +19,17 @@ public class County implements Serializable {
 
     @SerializedName("error")
     private String error;
+
+    public County(int databaseId, String id, String name) {
+        this.databaseId = databaseId;
+        this.id = id;
+        this.name = name;
+    }
+
+    public County(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     public String getId() {
         return id;

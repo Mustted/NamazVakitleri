@@ -166,7 +166,7 @@ public class DatabaseManager {
             values.put(PrayerTimesTable.COLUMN_NAME_FAJR, prayerTimes.getFajr());
             values.put(PrayerTimesTable.COLUMN_NAME_SUNRISE, prayerTimes.getSunrise());
             values.put(PrayerTimesTable.COLUMN_NAME_DHUHR, prayerTimes.getDhuhr());
-            values.put(PrayerTimesTable.COLUMN_NAME_ASR, prayerTimes.getDhuhr());
+            values.put(PrayerTimesTable.COLUMN_NAME_ASR, prayerTimes.getAsr());
             values.put(PrayerTimesTable.COLUMN_NAME_MAGHRIB, prayerTimes.getMaghrib());
             values.put(PrayerTimesTable.COLUMN_NAME_ISHA, prayerTimes.getIsha());
 
@@ -184,7 +184,7 @@ public class DatabaseManager {
             values.put(PrayerTimesTable.COLUMN_NAME_FAJR, prayerTimes.getFajr());
             values.put(PrayerTimesTable.COLUMN_NAME_SUNRISE, prayerTimes.getSunrise());
             values.put(PrayerTimesTable.COLUMN_NAME_DHUHR, prayerTimes.getDhuhr());
-            values.put(PrayerTimesTable.COLUMN_NAME_ASR, prayerTimes.getDhuhr());
+            values.put(PrayerTimesTable.COLUMN_NAME_ASR, prayerTimes.getAsr());
             values.put(PrayerTimesTable.COLUMN_NAME_MAGHRIB, prayerTimes.getMaghrib());
             values.put(PrayerTimesTable.COLUMN_NAME_ISHA, prayerTimes.getIsha());
 

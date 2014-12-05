@@ -61,7 +61,7 @@ public class CountyChooserActivity extends ActionBarActivity {
         mPreviousButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                goBack();
             }
         });
 
@@ -93,9 +93,21 @@ public class CountyChooserActivity extends ActionBarActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        goBack();
+    }
+
+    @Override
     public void finish() {
         super.finish();
         overridePendingTransition(R.anim.nothing, R.anim.fade_out);
+    }
+
+    private void goBack() {
+        Intent intent = new Intent(CountyChooserActivity.this, CityChooserActivity.class);
+        intent.putExtra(CityChooserActivity.ARG_COUNTRY, mCountry);
+        startActivity(intent);
+        finish();
     }
 
     private class FetchCountiesTask extends AsyncTask<Void, Void, Boolean> {

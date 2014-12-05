@@ -55,7 +55,7 @@ public class CityChooserActivity extends ActionBarActivity {
         mPreviousButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                goBack();
             }
         });
 
@@ -69,6 +69,7 @@ public class CityChooserActivity extends ActionBarActivity {
                     intent.putExtra(CountyChooserActivity.ARG_COUNTRY, mCountry);
                     intent.putExtra(CountyChooserActivity.ARG_CITY, city);
                     startActivity(intent);
+                    finish();
                 }
             }
         });
@@ -79,9 +80,19 @@ public class CityChooserActivity extends ActionBarActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        goBack();
+    }
+
+    @Override
     public void finish() {
         super.finish();
         overridePendingTransition(R.anim.nothing, R.anim.fade_out);
+    }
+
+    private void goBack() {
+        startActivity(new Intent(CityChooserActivity.this, CountryChooserActivity.class));
+        finish();
     }
 
     private class FetchCitiesTask extends AsyncTask<Void, Void, Boolean> {

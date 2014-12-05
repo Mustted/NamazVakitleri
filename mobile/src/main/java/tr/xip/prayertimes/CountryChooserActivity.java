@@ -60,6 +60,7 @@ public class CountryChooserActivity extends ActionBarActivity {
         mPreviousButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startActivity(new Intent(CountryChooserActivity.this, MainActivity.class));
                 finish();
             }
         });
@@ -72,6 +73,7 @@ public class CountryChooserActivity extends ActionBarActivity {
                 Intent intent = new Intent(CountryChooserActivity.this, CityChooserActivity.class);
                 intent.putExtra(CityChooserActivity.ARG_COUNTRY, country);
                 startActivity(intent);
+                finish();
             }
         });
     }
@@ -80,6 +82,5 @@ public class CountryChooserActivity extends ActionBarActivity {
     public void finish() {
         super.finish();
         overridePendingTransition(R.anim.nothing, R.anim.fade_out);
-        startActivity(new Intent(this, MainActivity.class));
     }
 }

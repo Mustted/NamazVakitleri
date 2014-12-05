@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_notifications_toggle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:foreground="@drawable/selector_light_oval">
+
+    <ImageView
+        android:id="@+id/widget_notifications_indicator"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/oval_gray_light"
+        android:scaleType="center"
+        android:src="@drawable/ic_notifications_off_grey600_24dp" />
+</FrameLayout>

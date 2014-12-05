@@ -96,7 +96,7 @@ public class PrayerTimesFragment extends Fragment {
 
     private void displayPrayerTimes() {
         if (mPrayerTimes != null) {
-            mAdapter = new PrayerTimesAdapter(context, mPrayerTimes.getPrayerTimesArrayList());
+            mAdapter = new PrayerTimesAdapter(context, mPrayerTimes.getPrayerTimesArrayList(), mLocation);
             if (mRecyclerView != null)
                 mRecyclerView.setAdapter(mAdapter);
         }

@@ -6,8 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -17,6 +15,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import tr.xip.prayertimes.R;
+import tr.xip.prayertimes.api.objects.Location;
+import tr.xip.prayertimes.db.DatabaseManager;
+import tr.xip.prayertimes.widget.NotificationsToggle;
 import tr.xip.prayertimes.widget.RelativeTimeTextView;
 
 /**
@@ -24,15 +25,18 @@ import tr.xip.prayertimes.widget.RelativeTimeTextView;
  */
 public class PrayerTimesAdapter extends RecyclerView.Adapter<PrayerTimesAdapter.ViewHolder> {
 
-    Context context;
+    private Context context;
 
-    ArrayList<Long> mDataset = new ArrayList<>();
+    private ArrayList<Long> mDataset = new ArrayList<>();
 
-    Map<Integer, Integer> mTitles = new HashMap<>();
+    private Map<Integer, Integer> mTitles = new HashMap<>();
 
-    public PrayerTimesAdapter(Context context, ArrayList<Long> dataset) {
+    private Location mLocation;
+
+    public PrayerTimesAdapter(Context context, ArrayList<Long> dataset, Location location) {
         this.context = context;
-        mDataset = dataset;
+        this.mDataset = dataset;
+        this.mLocation = location;
 
         mTitles.put(0, R.string.prayer_time_fajr);
         mTitles.put(1, R.string.prayer_time_sunrise);
@@ -50,7 +54,7 @@ public class PrayerTimesAdapter extends RecyclerView.Adapter<PrayerTimesAdapter.
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         long timestamp = mDataset.get(position);
 
         Date prayerTime = new Date(timestamp);
@@ -79,13 +83,64 @@ public class PrayerTimesAdapter extends RecyclerView.Adapter<PrayerTimesAdapter.
                 holder.mName.setTextColor(res.getColor(R.color.apptheme_primary));
         }
 
-        holder.mNotificationToggle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        loadNotificationsState(holder, position);
 
-            }
-        });
+        holder.mNotificationsToggle.setOnNotificationStateChangedListener(
+                new NotificationsToggle.OnNotificationStateChangedListener() {
+                    @Override
+                    public void onNotificationsStateChanged(int notificationsState) {
+                        saveNotificationsState(notificationsState, position);
+                    }
+                });
 
+    }
+
+    private void loadNotificationsState(ViewHolder holder, int position) {
+        switch (position) {
+            case 0:
+                holder.mNotificationsToggle.setNotificationsState(mLocation.getFajrNotification());
+                break;
+            case 1:
+                holder.mNotificationsToggle.setNotificationsState(mLocation.getSunriseNotiication());
+                break;
+            case 2:
+                holder.mNotificationsToggle.setNotificationsState(mLocation.getDhuhrNotification());
+                break;
+            case 3:
+                holder.mNotificationsToggle.setNotificationsState(mLocation.getAsrNotification());
+                break;
+            case 4:
+                holder.mNotificationsToggle.setNotificationsState(mLocation.getMaghribNotification());
+                break;
+            case 5:
+                holder.mNotificationsToggle.setNotificationsState(mLocation.getIshaNotification());
+                break;
+        }
+    }
+
+    private void saveNotificationsState(int notificationsState, int position) {
+        switch (position) {
+            case 0:
+                mLocation.setFajrNotification(notificationsState);
+                break;
+            case 1:
+                mLocation.setSunriseNotiication(notificationsState);
+                break;
+            case 2:
+                mLocation.setDhuhrNotification(notificationsState);
+                break;
+            case 3:
+                mLocation.setAsrNotification(notificationsState);
+                break;
+            case 4:
+                mLocation.setMaghribNotification(notificationsState);
+                break;
+            case 5:
+                mLocation.setIshaNotification(notificationsState);
+                break;
+        }
+
+        new DatabaseManager(context).updateLocation(mLocation);
     }
 
     @Override
@@ -94,15 +149,13 @@ public class PrayerTimesAdapter extends RecyclerView.Adapter<PrayerTimesAdapter.
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public FrameLayout mNotificationToggle;
-        public ImageView mNotificationIndicator;
+        public NotificationsToggle mNotificationsToggle;
         public TextView mName;
         public RelativeTimeTextView mTime;
 
         public ViewHolder(View v) {
             super(v);
-            mNotificationToggle = (FrameLayout) v.findViewById(R.id.item_prayer_notifications_toggle);
-            mNotificationIndicator = (ImageView) v.findViewById(R.id.item_prayer_notifications_indicator);
+            mNotificationsToggle = (NotificationsToggle) v.findViewById(R.id.item_prayer_notifications_toggle);
             mName = (TextView) v.findViewById(R.id.item_prayer_name);
             mTime = (RelativeTimeTextView) v.findViewById(R.id.item_prayer_time);
         }

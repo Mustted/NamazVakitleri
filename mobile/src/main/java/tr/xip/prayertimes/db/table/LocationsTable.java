@@ -14,5 +14,11 @@ public class LocationsTable implements BaseColumns {
     public static final String COLUMN_CITY_NAME = "cityName";
     public static final String COLUMN_COUNTY_ID = "county";
     public static final String COLUMN_COUNTY_NAME = "countyName";
+    public static final String COLUMN_NAME_NOTIF_FAJR = "fajrNotification";
+    public static final String COLUMN_NAME_NOTIF_SUNRISE = "sunriseNotification";
+    public static final String COLUMN_NAME_NOTIF_DHUHR = "dhuhrNotification";
+    public static final String COLUMN_NAME_NOTIF_ASR = "asrNotification";
+    public static final String COLUMN_NAME_NOTIF_MAGHRIB = "maghribNotification";
+    public static final String COLUMN_NAME_NOTIF_ISHA = "ishaNotification";
     public static final String COLUMN_NULLABLE = "nullable";
 }

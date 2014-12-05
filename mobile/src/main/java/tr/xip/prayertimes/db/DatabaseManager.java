@@ -57,13 +57,40 @@ public class DatabaseManager {
     public long addLocation(Location location) {
         ContentValues values = new ContentValues();
         values.put(LocationsTable.COLUMN_COUNTRY_ID, location.getCountryId());
-        values.put(LocationsTable.COLUMN_COUNTRY_NAME, location.getcountryNama());
+        values.put(LocationsTable.COLUMN_COUNTRY_NAME, location.getCountryName());
         values.put(LocationsTable.COLUMN_CITY_ID, location.getCityId());
         values.put(LocationsTable.COLUMN_CITY_NAME, location.getCityName());
         values.put(LocationsTable.COLUMN_COUNTY_ID, location.getCountyId());
         values.put(LocationsTable.COLUMN_COUNTY_NAME, location.getCountyName());
+        values.put(LocationsTable.COLUMN_NAME_NOTIF_FAJR, location.getFajrNotification());
+        values.put(LocationsTable.COLUMN_NAME_NOTIF_SUNRISE, location.getSunriseNotiication());
+        values.put(LocationsTable.COLUMN_NAME_NOTIF_DHUHR, location.getDhuhrNotification());
+        values.put(LocationsTable.COLUMN_NAME_NOTIF_ASR, location.getAsrNotification());
+        values.put(LocationsTable.COLUMN_NAME_NOTIF_MAGHRIB, location.getMaghribNotification());
+        values.put(LocationsTable.COLUMN_NAME_NOTIF_ISHA, location.getIshaNotification());
 
         return db.insert(LocationsTable.TABLE_NAME, LocationsTable.COLUMN_NULLABLE, values);
+    }
+
+    public int updateLocation(Location location) {
+        ContentValues values = new ContentValues();
+        values.put(LocationsTable.COLUMN_COUNTRY_ID, location.getCountryId());
+        values.put(LocationsTable.COLUMN_COUNTRY_NAME, location.getCountryName());
+        values.put(LocationsTable.COLUMN_CITY_ID, location.getCityId());
+        values.put(LocationsTable.COLUMN_CITY_NAME, location.getCityName());
+        values.put(LocationsTable.COLUMN_COUNTY_ID, location.getCountyId());
+        values.put(LocationsTable.COLUMN_COUNTY_NAME, location.getCountyName());
+        values.put(LocationsTable.COLUMN_NAME_NOTIF_FAJR, location.getFajrNotification());
+        values.put(LocationsTable.COLUMN_NAME_NOTIF_SUNRISE, location.getSunriseNotiication());
+        values.put(LocationsTable.COLUMN_NAME_NOTIF_DHUHR, location.getDhuhrNotification());
+        values.put(LocationsTable.COLUMN_NAME_NOTIF_ASR, location.getAsrNotification());
+        values.put(LocationsTable.COLUMN_NAME_NOTIF_MAGHRIB, location.getMaghribNotification());
+        values.put(LocationsTable.COLUMN_NAME_NOTIF_ISHA, location.getIshaNotification());
+
+        String where = LocationsTable.COLUMN_ID + " = ?";
+        String[] whereArgs = new String[]{String.valueOf(location.getDatabaseId())};
+
+        return db.update(LocationsTable.TABLE_NAME, values, where, whereArgs);
     }
 
     public void removeLocation(int locationId) {
@@ -93,6 +120,12 @@ public class DatabaseManager {
                 String cityName = c.getString(c.getColumnIndexOrThrow(LocationsTable.COLUMN_CITY_NAME));
                 String countyId = c.getString(c.getColumnIndexOrThrow(LocationsTable.COLUMN_COUNTY_ID));
                 String countyName = c.getString(c.getColumnIndexOrThrow(LocationsTable.COLUMN_COUNTY_NAME));
+                int fajrNotif = c.getInt(c.getColumnIndexOrThrow(LocationsTable.COLUMN_NAME_NOTIF_FAJR));
+                int sunriseNotif = c.getInt(c.getColumnIndexOrThrow(LocationsTable.COLUMN_NAME_NOTIF_SUNRISE));
+                int dhuhrNotif = c.getInt(c.getColumnIndexOrThrow(LocationsTable.COLUMN_NAME_NOTIF_DHUHR));
+                int asrNotif = c.getInt(c.getColumnIndexOrThrow(LocationsTable.COLUMN_NAME_NOTIF_ASR));
+                int maghribNotif = c.getInt(c.getColumnIndexOrThrow(LocationsTable.COLUMN_NAME_NOTIF_MAGHRIB));
+                int ishaNotif = c.getInt(c.getColumnIndexOrThrow(LocationsTable.COLUMN_NAME_NOTIF_ISHA));
 
                 Location location = new Location(
                         databaseId,
@@ -101,7 +134,13 @@ public class DatabaseManager {
                         cityId,
                         cityName,
                         countyId,
-                        countyName
+                        countyName,
+                        fajrNotif,
+                        sunriseNotif,
+                        dhuhrNotif,
+                        asrNotif,
+                        maghribNotif,
+                        ishaNotif
                 );
                 list.add(location);
             } while (c.moveToNext());

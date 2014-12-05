@@ -29,8 +29,7 @@ public class DatabaseManager {
 
     String[] prayerTimesProjection = {
             PrayerTimesTable.COLUMN_NAME_ID,
-            PrayerTimesTable.COLUMN_NAME_CITY,
-            PrayerTimesTable.COLUMN_NAME_COUNTY,
+            PrayerTimesTable.COLUMN_NAME_LOCATION,
             PrayerTimesTable.COLUMN_NAME_DATE,
             PrayerTimesTable.COLUMN_NAME_FAJR,
             PrayerTimesTable.COLUMN_NAME_SUNRISE,
@@ -38,6 +37,16 @@ public class DatabaseManager {
             PrayerTimesTable.COLUMN_NAME_ASR,
             PrayerTimesTable.COLUMN_NAME_MAGHRIB,
             PrayerTimesTable.COLUMN_NAME_ISHA
+    };
+
+    String[] locationsProjection = {
+            LocationsTable.COLUMN_ID,
+            LocationsTable.COLUMN_COUNTRY_ID,
+            LocationsTable.COLUMN_COUNTRY_NAME,
+            LocationsTable.COLUMN_CITY_ID,
+            LocationsTable.COLUMN_CITY_NAME,
+            LocationsTable.COLUMN_COUNTY_ID,
+            LocationsTable.COLUMN_COUNTY_NAME,
     };
 
     public DatabaseManager(Context context) {
@@ -57,11 +66,15 @@ public class DatabaseManager {
         return db.insert(LocationsTable.TABLE_NAME, LocationsTable.COLUMN_NULLABLE, values);
     }
 
-    public int removeLocation(int locationId) {
+    public void removeLocation(int locationId) {
         String selection = LocationsTable.COLUMN_ID + " = ?";
         String[] selectionArgs = new String[]{String.valueOf(locationId)};
 
-        return db.delete(LocationsTable.TABLE_NAME, selection, selectionArgs);
+        db.delete(LocationsTable.TABLE_NAME, selection, selectionArgs);
+
+        selection = PrayerTimesTable.COLUMN_NAME_LOCATION + " = ?";
+
+        db.delete(PrayerTimesTable.TABLE_NAME, selection, selectionArgs);
     }
 
     public List<Location> getLocations() {
@@ -99,35 +112,17 @@ public class DatabaseManager {
         return list;
     }
 
-    public PrayerTimes getPrayerTimes(String countryId, String cityId, String countyId, long date) {
+    public PrayerTimes getPrayerTimes(int locationId, long date) {
 
         String sortOrder =
                 PrayerTimesTable.COLUMN_NAME_DATE + SORT_ASCN;
 
-        String selection;
-        String[] selectionArgs;
-
-        if (countyId == null) {
-            selection = PrayerTimesTable.COLUMN_NAME_COUNTRY + " = ?" + " AND "
-                    + PrayerTimesTable.COLUMN_NAME_CITY + " = ?" + " AND "
+        String selection = PrayerTimesTable.COLUMN_NAME_LOCATION + " = ?" + " AND "
                     + PrayerTimesTable.COLUMN_NAME_DATE + " = ?";
-            selectionArgs = new String[]{
-                    countryId,
-                    cityId,
-                    String.valueOf(date)
-            };
-        } else {
-            selection = PrayerTimesTable.COLUMN_NAME_COUNTRY + " = ?" + " AND "
-                    + PrayerTimesTable.COLUMN_NAME_CITY + " = ?" + " AND "
-                    + PrayerTimesTable.COLUMN_NAME_COUNTY + " = ?" + " AND "
-                    + PrayerTimesTable.COLUMN_NAME_DATE + " = ?";
-            selectionArgs = new String[]{
-                    countryId,
-                    cityId,
-                    countyId,
-                    String.valueOf(date)
-            };
-        }
+        String[] selectionArgs = new String[]{
+                String.valueOf(locationId),
+                String.valueOf(date)
+        };
 
         Cursor c = db.query(
                 PrayerTimesTable.TABLE_NAME,
@@ -156,30 +151,10 @@ public class DatabaseManager {
         }
     }
 
-    public void addPrayerTimesByCityId(List<PrayerTimes> list, String countryId, String cityId) {
+    public void addPrayerTimes(List<PrayerTimes> list, int locationId) {
         for (PrayerTimes prayerTimes : list) {
             ContentValues values = new ContentValues();
-            values.put(PrayerTimesTable.COLUMN_NAME_COUNTRY, countryId);
-            values.put(PrayerTimesTable.COLUMN_NAME_CITY, cityId);
-            values.put(PrayerTimesTable.COLUMN_NAME_COUNTY, "null");
-            values.put(PrayerTimesTable.COLUMN_NAME_DATE, prayerTimes.getDate());
-            values.put(PrayerTimesTable.COLUMN_NAME_FAJR, prayerTimes.getFajr());
-            values.put(PrayerTimesTable.COLUMN_NAME_SUNRISE, prayerTimes.getSunrise());
-            values.put(PrayerTimesTable.COLUMN_NAME_DHUHR, prayerTimes.getDhuhr());
-            values.put(PrayerTimesTable.COLUMN_NAME_ASR, prayerTimes.getAsr());
-            values.put(PrayerTimesTable.COLUMN_NAME_MAGHRIB, prayerTimes.getMaghrib());
-            values.put(PrayerTimesTable.COLUMN_NAME_ISHA, prayerTimes.getIsha());
-
-            db.insert(PrayerTimesTable.TABLE_NAME, PrayerTimesTable.COLUMN_NULLABLE, values);
-        }
-    }
-
-    public void addPrayerTimesByCountyId(List<PrayerTimes> list, String countryId, String cityId, String countyId) {
-        for (PrayerTimes prayerTimes : list) {
-            ContentValues values = new ContentValues();
-            values.put(PrayerTimesTable.COLUMN_NAME_COUNTRY, countryId);
-            values.put(PrayerTimesTable.COLUMN_NAME_CITY, cityId);
-            values.put(PrayerTimesTable.COLUMN_NAME_COUNTY, countyId);
+            values.put(PrayerTimesTable.COLUMN_NAME_LOCATION, locationId);
             values.put(PrayerTimesTable.COLUMN_NAME_DATE, prayerTimes.getDate());
             values.put(PrayerTimesTable.COLUMN_NAME_FAJR, prayerTimes.getFajr());
             values.put(PrayerTimesTable.COLUMN_NAME_SUNRISE, prayerTimes.getSunrise());

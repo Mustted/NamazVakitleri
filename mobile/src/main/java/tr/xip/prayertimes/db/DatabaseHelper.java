@@ -38,9 +38,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String SQL_CREATE_PRAYER_TIMES_TABLE = "CREATE TABLE "
             + PrayerTimesTable.TABLE_NAME + " ("
             + PrayerTimesTable.COLUMN_NAME_ID + INTEGER_PRIMARY_KEY_AUTOINCREMENT + COMMA_SEP
-            + PrayerTimesTable.COLUMN_NAME_COUNTRY + TEXT_TYPE + COMMA_SEP
-            + PrayerTimesTable.COLUMN_NAME_CITY + TEXT_TYPE + COMMA_SEP
-            + PrayerTimesTable.COLUMN_NAME_COUNTY + TEXT_TYPE + COMMA_SEP
+            + PrayerTimesTable.COLUMN_NAME_LOCATION + INTEGER_TYPE + COMMA_SEP
             + PrayerTimesTable.COLUMN_NAME_DATE + INTEGER_TYPE + COMMA_SEP
             + PrayerTimesTable.COLUMN_NAME_FAJR + INTEGER_TYPE + COMMA_SEP
             + PrayerTimesTable.COLUMN_NAME_SUNRISE + INTEGER_TYPE + COMMA_SEP

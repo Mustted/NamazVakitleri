@@ -1,90 +1,97 @@
 package tr.xip.prayertimes;
 
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ViewFlipper;
 
+import com.astuetz.PagerSlidingTabStrip;
+
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
-import tr.xip.prayertimes.apdater.PrayerTimesAdapter;
-import tr.xip.prayertimes.api.DiyanetApi;
+import tr.xip.prayertimes.apdater.LocationTabsPagerAdapter;
 import tr.xip.prayertimes.api.objects.Location;
-import tr.xip.prayertimes.api.objects.PrayerTimes;
 import tr.xip.prayertimes.db.DatabaseManager;
-import tr.xip.prayertimes.widget.DividerItemDecoration;
 
 public class MainActivity extends ActionBarActivity {
-    private static final String STATE_PRAYER_TIMES = "state_prayer_times";
+    private static final String PREF_LAST_LOCATION = "pref_last_location";
 
-    private static final int FLIPPER_PROGRESS_BAR = 1;
+    private static final int FLIPPER_NO_LOCATIONS = 1;
     private static final int FLIPPER_CONTENT = 0;
 
     private Toolbar mToolbar;
 
     private DatabaseManager dbMan;
-    private DiyanetApi api;
+    private SharedPreferences mSharedPrefs;
 
     private List<Location> mLocations = new ArrayList<>();
-    private Location mLocation;
 
-    private PrayerTimes mPrayerTimes;
+    private ViewPager mViewPager;
+    private LocationTabsPagerAdapter mAdapter;
+    private PagerSlidingTabStrip mTabs;
 
     private ViewFlipper mFlipper;
 
-    private RecyclerView mRecyclerView;
-    private PrayerTimesAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    private MenuItem mRemoveItem;
+
+    private int currentPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         dbMan = new DatabaseManager(this);
-        api = new DiyanetApi();
+        mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
+        mFlipper = (ViewFlipper) findViewById(R.id.activity_main_flipper);
+
         mLocations = dbMan.getLocations();
 
-        if (savedInstanceState != null)
-            mPrayerTimes = (PrayerTimes) savedInstanceState.get(STATE_PRAYER_TIMES);
+        if (mLocations.size() > 0) {
+            mAdapter = new LocationTabsPagerAdapter(
+                    getSupportFragmentManager(), mLocations);
+            mViewPager = (ViewPager) findViewById(R.id.activity_main_view_pager);
+            mViewPager.setAdapter(mAdapter);
 
-        if (mLocations.size() == 0) {
-            startActivity(new Intent(this, CountryChooserActivity.class));
-            finish();
-        } else {
-            mFlipper = (ViewFlipper) findViewById(R.id.activity_main_flipper);
+            mTabs = (PagerSlidingTabStrip) findViewById(R.id.activity_main_pager_tabs);
+            mTabs.setViewPager(mViewPager);
+            mTabs.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-            mRecyclerView = (RecyclerView) findViewById(R.id.activity_main_recycler);
-            mLayoutManager = new LinearLayoutManager(this);
-            mRecyclerView.setLayoutManager(mLayoutManager);
-            mRecyclerView.addItemDecoration(new DividerItemDecoration(this,
-                    DividerItemDecoration.VERTICAL_LIST));
+                }
 
-            mLocation = mLocations.get(0);
+                @Override
+                public void onPageSelected(int position) {
+                    currentPage = position;
+                    mSharedPrefs.edit().putInt(PREF_LAST_LOCATION, position).commit();
+                }
 
-            if (mPrayerTimes != null)
-                displayPrayerTimes();
-            else
-                new LoadPrayerTimesForTodayTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                @Override
+                public void onPageScrollStateChanged(int position) {
 
-        }
+                }
+            });
+
+            mViewPager.setCurrentItem(mSharedPrefs.getInt(PREF_LAST_LOCATION, 0));
+        } else
+            mFlipper.setDisplayedChild(FLIPPER_NO_LOCATIONS);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        mRemoveItem = menu.findItem(R.id.action_remove_location);
         return true;
     }
 
@@ -92,6 +99,18 @@ public class MainActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
+            case R.id.action_add_new_location:
+                startActivity(new Intent(this, CountryChooserActivity.class));
+                finish();
+                break;
+            case R.id.action_remove_location:
+                int itemToRemovePos = currentPage;
+                if (currentPage > 0)
+                    mViewPager.setCurrentItem(currentPage - 1);
+                dbMan.removeLocation(mAdapter.getDatabaseIdByPosition(itemToRemovePos));
+                mAdapter.removeLocation(itemToRemovePos);
+                onTabsChanged();
+                break;
             case R.id.action_settings:
                 // ...
                 break;
@@ -100,135 +119,16 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable(STATE_PRAYER_TIMES, mPrayerTimes);
-    }
+    private void onTabsChanged() {
+        mTabs.notifyDataSetChanged();
 
-    private boolean locationHasCountyValue() {
-        return mLocation.getCountyId() != null;
-    }
-    
-    private void displayPrayerTimes() {
-        if (mPrayerTimes != null) {
-            mAdapter = new PrayerTimesAdapter(this, mPrayerTimes.getPrayerTimesArrayList());
-            if (mRecyclerView != null)
-                mRecyclerView.setAdapter(mAdapter);
-        }
-    }
+        if (mAdapter.getCount() == 0)
+            mFlipper.setDisplayedChild(FLIPPER_NO_LOCATIONS);
 
-    private class LoadPrayerTimesForTodayTask extends AsyncTask<Void, Void, Boolean> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            if (mFlipper != null)
-                mFlipper.setDisplayedChild(FLIPPER_PROGRESS_BAR);
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
-            long now = cal.getTimeInMillis();
-
-            if (locationHasCountyValue())
-                mPrayerTimes = dbMan.getPrayerTimes(
-                        mLocation.getCountryId(),
-                        mLocation.getCityId(),
-                        mLocation.getCountyId(),
-                        now
-                );
+        if (mRemoveItem != null)
+            if (mLocations.size() == 0)
+                mRemoveItem.setVisible(false);
             else
-                mPrayerTimes = dbMan.getPrayerTimes(
-                        mLocation.getCountryId(),
-                        mLocation.getCityId(),
-                        null,
-                        now
-                );
-
-            return mPrayerTimes != null;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean success) {
-            super.onPostExecute(success);
-
-            if (success) {
-                displayPrayerTimes();
-
-            } else {
-                new FetchPrayerTimesTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            }
-
-            if (mFlipper != null)
-                mFlipper.setDisplayedChild(FLIPPER_CONTENT);
-        }
-    }
-
-    private class FetchPrayerTimesTask extends AsyncTask<Void, Void, Boolean> {
-        List<PrayerTimes> mPrayerTimesList;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            if (mFlipper != null)
-                mFlipper.setDisplayedChild(FLIPPER_PROGRESS_BAR);
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            try {
-                if (locationHasCountyValue()) {
-                    mPrayerTimesList = api.getPrayerTimesForCounty(
-                            mLocation.getCountryId(),
-                            mLocation.getCityId(),
-                            mLocation.getCountyId()
-                    );
-                } else {
-                    mPrayerTimesList = api.getPrayerTimesForCity(
-                            mLocation.getCountryId(),
-                            mLocation.getCityId()
-                    );
-                }
-                return true;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Boolean success) {
-            super.onPostExecute(success);
-
-            if (success) {
-                if (locationHasCountyValue())
-                    dbMan.addPrayerTimesByCountyId(
-                            mPrayerTimesList,
-                            mLocation.getCountryId(),
-                            mLocation.getCityId(),
-                            mLocation.getCountyId()
-                    );
-                else
-                    dbMan.addPrayerTimesByCityId(mPrayerTimesList,
-                            mLocation.getCountryId(),
-                            mLocation.getCityId()
-                    );
-
-                new LoadPrayerTimesForTodayTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            } else {
-                // TODO: indicate failure
-            }
-
-            if (mFlipper != null)
-                mFlipper.setDisplayedChild(FLIPPER_CONTENT);
-        }
+                mRemoveItem.setVisible(true);
     }
 }

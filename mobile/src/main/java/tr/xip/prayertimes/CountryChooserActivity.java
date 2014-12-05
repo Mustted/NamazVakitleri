@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,7 +21,6 @@ import tr.xip.prayertimes.api.objects.Country;
  * Created by ix on 11/30/14.
  */
 public class CountryChooserActivity extends ActionBarActivity {
-
     private DiyanetApi api;
 
     private List<Country> mCountriesList = new ArrayList<>();
@@ -52,8 +52,17 @@ public class CountryChooserActivity extends ActionBarActivity {
             }
         });
 
+        ((ImageView) findViewById(R.id.chooser_previous_icon))
+                .setImageResource(R.drawable.ic_close_grey600_18dp);
+        ((TextView) findViewById(R.id.chooser_previous_text)).setText(R.string.cancel);
+
         LinearLayout mPreviousButton = (LinearLayout) findViewById(R.id.chooser_previous);
-        mPreviousButton.setVisibility(View.GONE);
+        mPreviousButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         LinearLayout mNextButton = (LinearLayout) findViewById(R.id.chooser_next);
         mNextButton.setOnClickListener(new View.OnClickListener() {
@@ -71,5 +80,6 @@ public class CountryChooserActivity extends ActionBarActivity {
     public void finish() {
         super.finish();
         overridePendingTransition(R.anim.nothing, R.anim.fade_out);
+        startActivity(new Intent(this, MainActivity.class));
     }
 }

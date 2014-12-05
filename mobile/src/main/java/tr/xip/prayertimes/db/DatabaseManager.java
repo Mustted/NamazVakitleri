@@ -48,10 +48,20 @@ public class DatabaseManager {
     public long addLocation(Location location) {
         ContentValues values = new ContentValues();
         values.put(LocationsTable.COLUMN_COUNTRY_ID, location.getCountryId());
+        values.put(LocationsTable.COLUMN_COUNTRY_NAME, location.getcountryNama());
         values.put(LocationsTable.COLUMN_CITY_ID, location.getCityId());
+        values.put(LocationsTable.COLUMN_CITY_NAME, location.getCityName());
         values.put(LocationsTable.COLUMN_COUNTY_ID, location.getCountyId());
+        values.put(LocationsTable.COLUMN_COUNTY_NAME, location.getCountyName());
 
         return db.insert(LocationsTable.TABLE_NAME, LocationsTable.COLUMN_NULLABLE, values);
+    }
+
+    public int removeLocation(int locationId) {
+        String selection = LocationsTable.COLUMN_ID + " = ?";
+        String[] selectionArgs = new String[]{String.valueOf(locationId)};
+
+        return db.delete(LocationsTable.TABLE_NAME, selection, selectionArgs);
     }
 
     public List<Location> getLocations() {
@@ -65,10 +75,21 @@ public class DatabaseManager {
             do {
                 int databaseId = c.getInt(c.getColumnIndexOrThrow(LocationsTable.COLUMN_ID));
                 String countryId = c.getString(c.getColumnIndexOrThrow(LocationsTable.COLUMN_COUNTRY_ID));
+                String countryName = c.getString(c.getColumnIndexOrThrow(LocationsTable.COLUMN_COUNTRY_NAME));
                 String cityId = c.getString(c.getColumnIndexOrThrow(LocationsTable.COLUMN_CITY_ID));
+                String cityName = c.getString(c.getColumnIndexOrThrow(LocationsTable.COLUMN_CITY_NAME));
                 String countyId = c.getString(c.getColumnIndexOrThrow(LocationsTable.COLUMN_COUNTY_ID));
+                String countyName = c.getString(c.getColumnIndexOrThrow(LocationsTable.COLUMN_COUNTY_NAME));
 
-                Location location = new Location(databaseId, countryId, cityId, countyId);
+                Location location = new Location(
+                        databaseId,
+                        countryId,
+                        countryName,
+                        cityId,
+                        cityName,
+                        countyId,
+                        countyName
+                );
                 list.add(location);
             } while (c.moveToNext());
         } else {

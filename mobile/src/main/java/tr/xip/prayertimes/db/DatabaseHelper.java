@@ -26,8 +26,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + LocationsTable.TABLE_NAME + " ("
             + LocationsTable.COLUMN_ID + INTEGER_PRIMARY_KEY_AUTOINCREMENT + COMMA_SEP
             + LocationsTable.COLUMN_COUNTRY_ID + TEXT_TYPE + COMMA_SEP
+            + LocationsTable.COLUMN_COUNTRY_NAME + TEXT_TYPE + COMMA_SEP
             + LocationsTable.COLUMN_CITY_ID + TEXT_TYPE + COMMA_SEP
-            + LocationsTable.COLUMN_COUNTY_ID + TEXT_TYPE + " )";
+            + LocationsTable.COLUMN_CITY_NAME + TEXT_TYPE + COMMA_SEP
+            + LocationsTable.COLUMN_COUNTY_ID + TEXT_TYPE + COMMA_SEP
+            + LocationsTable.COLUMN_COUNTY_NAME + TEXT_TYPE + " )";
 
     public static final String SQL_DELETE_LOCATIONS_TABLE = "DROP TABLE IF EXISTS "
             + LocationsTable.TABLE_NAME;

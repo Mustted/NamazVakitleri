@@ -33,4 +33,5 @@ dependencies {
     compile 'com.google.android.gms:play-services:+'
     compile 'com.squareup.retrofit:retrofit:+'
     compile 'com.github.castorflex.smoothprogressbar:library:+'
+    compile 'com.astuetz:pagerslidingtabstrip:+'
 }

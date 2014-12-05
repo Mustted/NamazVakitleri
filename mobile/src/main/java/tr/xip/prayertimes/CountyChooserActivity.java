@@ -82,8 +82,11 @@ public class CountyChooserActivity extends ActionBarActivity {
     private void saveValuesAndExit(County county) {
         dbMan.addLocation(new Location(
                 mCountry.getId(),
+                mCountry.getName(),
                 mCity.getId(),
-                county != null ? county.getId() : null
+                mCity.getName(),
+                county != null ? county.getId() : null,
+                county != null ? county.getName() : null
         ));
         startActivity(new Intent(CountyChooserActivity.this, MainActivity.class));
         finish();

@@ -7,10 +7,19 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <include
-        layout="@layout/toolbar"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@color/apptheme_primary"
+        android:paddingLeft="@dimen/padding_toolbar_side"
+        android:paddingRight="@dimen/padding_toolbar_side"
+        android:paddingTop="@dimen/padding_toolbar_top">
+
+        <include
+            layout="@layout/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
 
     <ViewFlipper
         android:id="@+id/activity_main_flipper"
@@ -24,18 +33,27 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <com.astuetz.PagerSlidingTabStrip
-                android:id="@+id/activity_main_pager_tabs"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:background="@color/apptheme_primary"
-                android:textColor="@android:color/white"
-                app:pstsDividerColor="@android:color/transparent"
-                app:pstsIndicatorColor="@android:color/white"
-                app:pstsIndicatorHeight="2dp"
-                app:pstsTabBackground="@drawable/selector_light"
-                app:pstsTextAllCaps="true"
-                app:pstsUnderlineColor="@android:color/transparent" />
+                android:clipToPadding="false"
+                android:paddingLeft="@dimen/padding_tabs_side"
+                android:paddingRight="@dimen/padding_tabs_side"
+                android:paddingTop="@dimen/margin_tabs_top">
+
+                <com.astuetz.PagerSlidingTabStrip
+                    android:id="@+id/activity_main_pager_tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:textColor="@android:color/white"
+                    app:pstsDividerColor="@android:color/transparent"
+                    app:pstsIndicatorColor="@android:color/white"
+                    app:pstsIndicatorHeight="2dp"
+                    app:pstsTabBackground="@drawable/selector_light"
+                    app:pstsTextAllCaps="true"
+                    app:pstsUnderlineColor="@android:color/transparent" />
+            </FrameLayout>
 
             <FrameLayout
                 android:layout_width="match_parent"

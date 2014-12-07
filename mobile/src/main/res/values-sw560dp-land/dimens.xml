@@ -3,4 +3,7 @@
 
     <dimen name="margin_list_chooser">128dp</dimen>
     <dimen name="margin_left_text_chooser_header_title">128dp</dimen>
+    <dimen name="margin_tabs_top">0dp</dimen>
+
+    <dimen name="padding_toolbar_top">32dp</dimen>
 </resources>

@@ -4,7 +4,7 @@
     android:id="@+id/widget_notifications_toggle"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:foreground="@drawable/selector_light_oval">
+    android:foreground="@drawable/selector_accent_oval">
 
     <ImageView
         android:id="@+id/widget_notifications_indicator"

@@ -50,7 +50,7 @@
                     app:pstsDividerColor="@android:color/transparent"
                     app:pstsIndicatorColor="@android:color/white"
                     app:pstsIndicatorHeight="2dp"
-                    app:pstsTabBackground="@drawable/selector_light"
+                    app:pstsTabBackground="@drawable/selector_accent"
                     app:pstsTextAllCaps="true"
                     app:pstsUnderlineColor="@android:color/transparent" />
             </FrameLayout>

@@ -11,9 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/apptheme_primary"
-        android:paddingLeft="@dimen/padding_toolbar_side"
-        android:paddingRight="@dimen/padding_toolbar_side"
-        android:paddingTop="@dimen/padding_toolbar_top">
+        android:paddingLeft="@dimen/toolbar_padding_side"
+        android:paddingRight="@dimen/toolbar_padding_side"
+        android:paddingTop="@dimen/toolbar_padding_top">
 
         <include
             layout="@layout/toolbar"
@@ -38,8 +38,8 @@
                 android:layout_height="wrap_content"
                 android:background="@color/apptheme_primary"
                 android:clipToPadding="false"
-                android:paddingLeft="@dimen/padding_tabs_side"
-                android:paddingRight="@dimen/padding_tabs_side"
+                android:paddingLeft="@dimen/toolbar_padding_side"
+                android:paddingRight="@dimen/toolbar_padding_side"
                 android:paddingTop="@dimen/margin_tabs_top">
 
                 <com.astuetz.PagerSlidingTabStrip

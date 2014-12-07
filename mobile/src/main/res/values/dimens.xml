@@ -10,7 +10,7 @@
     <dimen name="margin_bottom_text_chooser_header_title">16dp</dimen>
     <dimen name="margin_tabs_top">0dp</dimen>
 
-    <dimen name="padding_toolbar_side">0dp</dimen>
-    <dimen name="padding_toolbar_top">0dp</dimen>
-    <dimen name="padding_prayer_times_side">@dimen/padding_toolbar_side</dimen>
+    <dimen name="toolbar_padding_side">0dp</dimen>
+    <dimen name="toolbar_padding_top">0dp</dimen>
+    <dimen name="padding_prayer_times_side">@dimen/toolbar_padding_side</dimen>
 </resources>

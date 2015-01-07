@@ -43,10 +43,10 @@ public class DiyanetApi {
     }
 
     public List<PrayerTimes> getPrayerTimesForCity(String countryId, String cityId) {
-        return service.getPrayerTimesForCity(countryId, cityId);
+        return service.getPrayerTimesForCity(countryId, cityId, "aylik");
     }
 
     public List<PrayerTimes> getPrayerTimesForCounty(String countryId, String cityId, String countyId) {
-        return service.getPrayerTimesForCounty(countryId, cityId, countyId);
+        return service.getPrayerTimesForCounty(countryId, cityId, countyId, "aylik");
     }
 }

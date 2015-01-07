@@ -26,13 +26,15 @@ public interface DiyanetService {
     @GET("/index.php?islem=getNamazVakitleri")
     public List<PrayerTimes> getPrayerTimesForCity(
             @Query("ulke_id") String countryId,
-            @Query("sehir_id") String cityId
+            @Query("sehir_id") String cityId,
+            @Query("periyot") String period
     );
 
     @GET("/index.php?islem=getNamazVakitleri")
     public List<PrayerTimes> getPrayerTimesForCounty(
             @Query("ulke_id") String countryId,
             @Query("sehir_id") String cityId,
-            @Query("ilce_id") String countyId
+            @Query("ilce_id") String countyId,
+            @Query("periyot") String period
     );
 }

@@ -2,9 +2,6 @@ package tr.xip.prayertimes.db.table;
 
 import android.provider.BaseColumns;
 
-/**
- * Created by ix on 12/1/14.
- */
 public class LocationsTable implements BaseColumns {
     public static final String TABLE_NAME = "locations";
     public static final String COLUMN_ID = "_id";

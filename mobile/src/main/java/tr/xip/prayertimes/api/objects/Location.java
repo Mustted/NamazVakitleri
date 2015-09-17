@@ -2,9 +2,6 @@ package tr.xip.prayertimes.api.objects;
 
 import java.io.Serializable;
 
-/**
- * Created by ix on 12/1/14.
- */
 public class Location implements Serializable {
     int databaseId;
     String countryId;

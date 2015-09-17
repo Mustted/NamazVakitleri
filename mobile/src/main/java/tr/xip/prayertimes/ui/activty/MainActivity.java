@@ -41,7 +41,7 @@ public class MainActivity extends ActionBarActivity {
 
     private MenuItem mRemoveItem;
 
-    private int currentPage;
+    private int mCurrentPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +72,7 @@ public class MainActivity extends ActionBarActivity {
 
                 @Override
                 public void onPageSelected(int position) {
-                    currentPage = position;
+                    mCurrentPage = position;
                     mSharedPrefs.edit().putInt(PREF_LAST_LOCATION, position).commit();
                 }
 
@@ -83,8 +83,9 @@ public class MainActivity extends ActionBarActivity {
             });
 
             mViewPager.setCurrentItem(mSharedPrefs.getInt(PREF_LAST_LOCATION, 0));
-        } else
+        } else {
             mFlipper.setDisplayedChild(FLIPPER_NO_LOCATIONS);
+        }
     }
 
     @Override
@@ -103,9 +104,10 @@ public class MainActivity extends ActionBarActivity {
                 finish();
                 break;
             case R.id.action_remove_location:
-                int itemToRemovePos = currentPage;
-                if (currentPage > 0)
-                    mViewPager.setCurrentItem(currentPage - 1);
+                int itemToRemovePos = mCurrentPage;
+                if (mCurrentPage > 0) {
+                    mViewPager.setCurrentItem(mCurrentPage - 1);
+                }
                 DatabaseManager.removeLocation(mAdapter.getDatabaseIdByPosition(itemToRemovePos));
                 mAdapter.removeLocation(itemToRemovePos);
                 onTabsChanged();
@@ -121,13 +123,16 @@ public class MainActivity extends ActionBarActivity {
     private void onTabsChanged() {
         mTabs.notifyDataSetChanged();
 
-        if (mAdapter.getCount() == 0)
+        if (mAdapter.getCount() == 0) {
             mFlipper.setDisplayedChild(FLIPPER_NO_LOCATIONS);
+        }
 
-        if (mRemoveItem != null)
-            if (mLocations.size() == 0)
+        if (mRemoveItem != null) {
+            if (mLocations.size() == 0) {
                 mRemoveItem.setVisible(false);
-            else
+            } else {
                 mRemoveItem.setVisible(true);
+            }
+        }
     }
 }

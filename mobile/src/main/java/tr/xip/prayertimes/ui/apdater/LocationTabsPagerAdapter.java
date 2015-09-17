@@ -11,14 +11,8 @@ import java.util.List;
 import tr.xip.prayertimes.ui.fragment.PrayerTimesFragment;
 import tr.xip.prayertimes.api.objects.Location;
 
-/**
- * Created by ix on 12/4/14.
- */
 public class LocationTabsPagerAdapter extends FragmentStatePagerAdapter {
-
-    List<Location> mLocations = new ArrayList<>();
-
-    int selectedPosition;
+    private List<Location> mLocations = new ArrayList<>();
 
     public LocationTabsPagerAdapter(FragmentManager fm, List<Location> list) {
         super(fm);

@@ -24,9 +24,6 @@ import tr.xip.prayertimes.api.objects.PrayerTimes;
 import tr.xip.prayertimes.db.DatabaseManager;
 import tr.xip.prayertimes.ui.widget.DividerItemDecoration;
 
-/**
- * Created by ix on 12/4/14.
- */
 public class PrayerTimesFragment extends Fragment {
     public static final String ARG_LOCATION = "arg_location";
 
@@ -54,12 +51,14 @@ public class PrayerTimesFragment extends Fragment {
         super.onCreate(savedInstanceState);
         this.context = getActivity();
 
-        if (savedInstanceState != null)
+        if (savedInstanceState != null) {
             mPrayerTimes = (PrayerTimes) savedInstanceState.get(STATE_PRAYER_TIMES);
+        }
 
         Bundle bundle = getArguments();
-        if (bundle != null)
+        if (bundle != null) {
             mLocation = (Location) bundle.getSerializable(ARG_LOCATION);
+        }
     }
 
     @Override
@@ -74,10 +73,11 @@ public class PrayerTimesFragment extends Fragment {
         mRecyclerView.addItemDecoration(new DividerItemDecoration(context,
                 DividerItemDecoration.VERTICAL_LIST));
 
-        if (mPrayerTimes != null)
+        if (mPrayerTimes != null) {
             displayPrayerTimes();
-        else
+        } else {
             new LoadPrayerTimesForTodayTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
 
         return rootView;
     }
@@ -95,8 +95,9 @@ public class PrayerTimesFragment extends Fragment {
     private void displayPrayerTimes() {
         if (mPrayerTimes != null) {
             mAdapter = new PrayerTimesAdapter(context, mPrayerTimes.getPrayerTimesArrayList(), mLocation);
-            if (mRecyclerView != null)
+            if (mRecyclerView != null) {
                 mRecyclerView.setAdapter(mAdapter);
+            }
         }
     }
 
@@ -106,8 +107,9 @@ public class PrayerTimesFragment extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            if (mFlipper != null)
+            if (mFlipper != null) {
                 mFlipper.setDisplayedChild(FLIPPER_PROGRESS_BAR);
+            }
         }
 
         @Override

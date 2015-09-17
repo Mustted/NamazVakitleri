@@ -16,16 +16,13 @@ import tr.xip.prayertimes.db.table.PrayerTimesTable;
 
 import static tr.xip.prayertimes.ui.app.NamazVakitleriApplication.getContext;
 
-/**
- * Created by ix on 12/1/14.
- */
 public class DatabaseManager {
-    private static SQLiteDatabase sDb;
-
     public static final String SORT_ASCN = " ASC";
     public static final String SORT_DESC = " DESC";
 
     private static final String TAG = "Database Manager";
+
+    private static SQLiteDatabase sDb;
 
     public static String[] prayerTimesProjection = {
             PrayerTimesTable.COLUMN_NAME_ID,

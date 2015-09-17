@@ -13,12 +13,8 @@ import java.util.List;
 import tr.xip.prayertimes.R;
 import tr.xip.prayertimes.api.objects.Country;
 
-/**
- * Created by ix on 11/30/14.
- */
 public class CountriesAdapter extends ArrayAdapter<Country> {
-
-    private Context context;
+    private Context mContext;
 
     private List<Country> mItems;
 
@@ -26,7 +22,7 @@ public class CountriesAdapter extends ArrayAdapter<Country> {
 
     public CountriesAdapter(Context context, int resource, List<Country> items) {
         super(context, resource, items);
-        this.context = context;
+        this.mContext = context;
         this.mItems = items;
     }
 
@@ -34,7 +30,7 @@ public class CountriesAdapter extends ArrayAdapter<Country> {
     public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater inflater =
-                    (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.item_radio, parent, false);
         }
 

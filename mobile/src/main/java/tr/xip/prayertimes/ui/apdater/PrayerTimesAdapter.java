@@ -20,12 +20,8 @@ import tr.xip.prayertimes.db.DatabaseManager;
 import tr.xip.prayertimes.ui.widget.NotificationsToggle;
 import tr.xip.prayertimes.ui.widget.RelativeTimeTextView;
 
-/**
- * Created by ix on 12/1/14.
- */
 public class PrayerTimesAdapter extends RecyclerView.Adapter<PrayerTimesAdapter.ViewHolder> {
-
-    private Context context;
+    private Context mContext;
 
     private ArrayList<Long> mDataset = new ArrayList<>();
 
@@ -34,7 +30,7 @@ public class PrayerTimesAdapter extends RecyclerView.Adapter<PrayerTimesAdapter.
     private Location mLocation;
 
     public PrayerTimesAdapter(Context context, ArrayList<Long> dataset, Location location) {
-        this.context = context;
+        this.mContext = context;
         this.mDataset = dataset;
         this.mLocation = location;
 
@@ -65,22 +61,24 @@ public class PrayerTimesAdapter extends RecyclerView.Adapter<PrayerTimesAdapter.
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         String timeString = sdf.format(timestamp);
 
-        if (now.after(prayerTime))
+        if (now.after(prayerTime)) {
             holder.mTime.setText(timeString);
-        else {
+        } else {
             holder.mTime.setPrefix(timeString + " ‒ ");
             holder.mTime.setReferenceTime(timestamp);
         }
 
-        Resources res = context.getResources();
+        Resources res = mContext.getResources();
         if (position == mDataset.size() - 1) {
-            if (now.after(prayerTime))
+            if (now.after(prayerTime)) {
                 holder.mName.setTextColor(res.getColor(R.color.apptheme_primary));
+            }
         } else {
             Date nextPrayerTime = new Date(mDataset.get(position + 1));
 
-            if (now.after(prayerTime) && now.before(nextPrayerTime))
+            if (now.after(prayerTime) && now.before(nextPrayerTime)) {
                 holder.mName.setTextColor(res.getColor(R.color.apptheme_primary));
+            }
         }
 
         loadNotificationsState(holder, position);

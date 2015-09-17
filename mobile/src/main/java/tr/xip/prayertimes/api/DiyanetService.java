@@ -9,9 +9,6 @@ import tr.xip.prayertimes.api.objects.City;
 import tr.xip.prayertimes.api.objects.County;
 import tr.xip.prayertimes.api.objects.PrayerTimes;
 
-/**
- * Created by ix on 11/30/14.
- */
 public interface DiyanetService {
 
     @GET("index.php?islem=getSehirList")

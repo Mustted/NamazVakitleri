@@ -5,9 +5,6 @@ import java.util.List;
 
 import tr.xip.prayertimes.api.objects.Country;
 
-/**
- * Created by ix on 11/30/14.
- */
 public class ApiResources {
 
     public static List<Country> getCountriesList() {

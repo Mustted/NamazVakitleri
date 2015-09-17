@@ -13,12 +13,8 @@ import java.util.List;
 import tr.xip.prayertimes.R;
 import tr.xip.prayertimes.api.objects.County;
 
-/**
- * Created by ix on 11/30/14.
- */
 public class CountiesAdapter extends ArrayAdapter<County> {
-
-    private Context context;
+    private Context mContext;
 
     private List<County> mItems;
 
@@ -26,7 +22,7 @@ public class CountiesAdapter extends ArrayAdapter<County> {
 
     public CountiesAdapter(Context context, int resource, List<County> items) {
         super(context, resource, items);
-        this.context = context;
+        this.mContext = context;
         this.mItems = items;
     }
 
@@ -34,7 +30,7 @@ public class CountiesAdapter extends ArrayAdapter<County> {
     public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater inflater =
-                    (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.item_radio, parent, false);
         }
 

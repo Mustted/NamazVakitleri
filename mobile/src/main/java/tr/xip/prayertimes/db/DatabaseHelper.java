@@ -8,9 +8,6 @@ import android.util.Log;
 import tr.xip.prayertimes.db.table.LocationsTable;
 import tr.xip.prayertimes.db.table.PrayerTimesTable;
 
-/**
- * Created by ix on 12/1/14.
- */
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "prayer_times_database.sDb";

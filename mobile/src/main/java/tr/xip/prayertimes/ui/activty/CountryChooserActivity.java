@@ -18,9 +18,6 @@ import tr.xip.prayertimes.ui.apdater.CountriesAdapter;
 import tr.xip.prayertimes.api.DiyanetApi;
 import tr.xip.prayertimes.api.objects.Country;
 
-/**
- * Created by ix on 11/30/14.
- */
 public class CountryChooserActivity extends ActionBarActivity {
     private List<Country> mCountriesList = new ArrayList<>();
 

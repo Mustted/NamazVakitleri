@@ -10,9 +10,6 @@ import tr.xip.prayertimes.api.objects.Country;
 import tr.xip.prayertimes.api.objects.County;
 import tr.xip.prayertimes.api.objects.PrayerTimes;
 
-/**
- * Created by ix on 11/30/14.
- */
 public class DiyanetApi {
     private static final String API_HOST = "http://namazvakitleri.ahmeti.net/";
 

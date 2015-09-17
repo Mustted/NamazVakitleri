@@ -22,9 +22,6 @@ import tr.xip.prayertimes.api.objects.City;
 import tr.xip.prayertimes.api.objects.Country;
 import tr.xip.prayertimes.db.DatabaseManager;
 
-/**
- * Created by ix on 11/30/14.
- */
 public class CityChooserActivity extends ActionBarActivity implements Callback<List<City>> {
     public static final String ARG_COUNTRY = "arg_country";
 

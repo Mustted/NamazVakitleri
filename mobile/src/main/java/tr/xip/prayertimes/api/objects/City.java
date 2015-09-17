@@ -4,11 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-/**
- * Created by ix on 11/30/14.
- */
 public class City implements Serializable {
-
     private int databaseId;
 
     @SerializedName("SehirId")

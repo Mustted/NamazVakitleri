@@ -9,9 +9,6 @@ import android.widget.ImageView;
 
 import tr.xip.prayertimes.R;
 
-/**
- * Created by ix on 12/5/14.
- */
 public class NotificationsToggle extends FrameLayout {
     private static final int NOTIFICATIONS_OFF = 0;
     private static final int NOTIFICATIONS_ON = 1;

@@ -6,11 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-/**
- * Created by ix on 11/30/14.
- */
 public class PrayerTimes implements Serializable {
-
     @SerializedName("Tarih")
     private String date;
 

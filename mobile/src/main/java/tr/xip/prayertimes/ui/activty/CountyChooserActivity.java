@@ -24,9 +24,6 @@ import tr.xip.prayertimes.api.objects.County;
 import tr.xip.prayertimes.api.objects.Location;
 import tr.xip.prayertimes.db.DatabaseManager;
 
-/**
- * Created by ix on 11/30/14.
- */
 public class CountyChooserActivity extends ActionBarActivity implements Callback<List<County>> {
     public static final String ARG_COUNTRY = "arg_country";
     public static final String ARG_CITY = "arg_city";

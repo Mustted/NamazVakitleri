@@ -14,6 +14,8 @@ import android.widget.ViewFlipper;
 import java.util.Calendar;
 import java.util.List;
 
+import retrofit.Callback;
+import retrofit.Response;
 import tr.xip.prayertimes.apdater.PrayerTimesAdapter;
 import tr.xip.prayertimes.api.DiyanetApi;
 import tr.xip.prayertimes.api.objects.Location;
@@ -35,7 +37,6 @@ public class PrayerTimesFragment extends Fragment {
     private Context context;
 
     private DatabaseManager dbMan;
-    private DiyanetApi api;
 
     private View rootView;
 
@@ -54,7 +55,6 @@ public class PrayerTimesFragment extends Fragment {
         super.onCreate(savedInstanceState);
         this.context = getActivity();
         this.dbMan = new DatabaseManager(context);
-        this.api = new DiyanetApi();
 
         if (savedInstanceState != null)
             mPrayerTimes = (PrayerTimes) savedInstanceState.get(STATE_PRAYER_TIMES);
@@ -130,63 +130,66 @@ public class PrayerTimesFragment extends Fragment {
         protected void onPostExecute(Boolean success) {
             super.onPostExecute(success);
 
-            if (success)
+            if (success) {
                 displayPrayerTimes();
-            else
-                new FetchPrayerTimesTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            } else {
+                if (mFlipper != null) {
+                    mFlipper.setDisplayedChild(FLIPPER_PROGRESS_BAR);
+                }
 
-            if (mFlipper != null)
-                mFlipper.setDisplayedChild(FLIPPER_CONTENT);
-        }
-    }
-
-    private class FetchPrayerTimesTask extends AsyncTask<Void, Void, Boolean> {
-        List<PrayerTimes> mPrayerTimesList;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            if (mFlipper != null)
-                mFlipper.setDisplayedChild(FLIPPER_PROGRESS_BAR);
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            try {
                 if (locationHasCountyValue()) {
-                    mPrayerTimesList = api.getPrayerTimesForCounty(
+                    new DiyanetApi().getPrayerTimesForCounty(
                             mLocation.getCountryId(),
                             mLocation.getCityId(),
                             mLocation.getCountyId()
-                    );
+                    ).enqueue(new PrayerTimesListCallback());
                 } else {
-                    mPrayerTimesList = api.getPrayerTimesForCity(
+                    new DiyanetApi().getPrayerTimesForCity(
                             mLocation.getCountryId(),
                             mLocation.getCityId()
-                    );
+                    ).enqueue(new PrayerTimesListCallback());
                 }
-                return true;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
+            }
+
+            if (mFlipper != null) {
+                mFlipper.setDisplayedChild(FLIPPER_CONTENT);
             }
         }
 
-        @Override
-        protected void onPostExecute(Boolean success) {
-            super.onPostExecute(success);
+        private class PrayerTimesListCallback implements Callback<List<PrayerTimes>> {
 
-            if (success) {
-                dbMan.addPrayerTimes(mPrayerTimesList, mLocation.getDatabaseId());
+            @Override
+            public void onResponse(Response<List<PrayerTimes>> response) {
+                List<PrayerTimes> mPrayerTimesList = response.body();
 
-                new LoadPrayerTimesForTodayTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            } else {
-                // TODO: indicate failure
+                if (mPrayerTimesList != null) {
+                    dbMan.addPrayerTimes(mPrayerTimesList, mLocation.getDatabaseId());
+
+                    new LoadPrayerTimesForTodayTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                } else {
+                    fail(response);
+                }
+
+                if (mFlipper != null) {
+                    mFlipper.setDisplayedChild(FLIPPER_CONTENT);
+                }
             }
 
-            if (mFlipper != null)
-                mFlipper.setDisplayedChild(FLIPPER_CONTENT);
+            @Override
+            public void onFailure(Throwable t) {
+                fail(null);
+                end();
+            }
+
+            private void fail(Response response) {
+                // TODO
+            }
+
+            private void end() {
+                if (mFlipper != null) {
+                    mFlipper.setDisplayedChild(FLIPPER_CONTENT);
+                }
+            }
         }
     }
 }

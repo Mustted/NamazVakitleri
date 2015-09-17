@@ -21,8 +21,6 @@ import tr.xip.prayertimes.api.objects.Country;
  * Created by ix on 11/30/14.
  */
 public class CountryChooserActivity extends ActionBarActivity {
-    private DiyanetApi api;
-
     private List<Country> mCountriesList = new ArrayList<>();
 
     private ListView mCountriesListView;
@@ -33,12 +31,11 @@ public class CountryChooserActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.fade_in, R.anim.nothing);
         setContentView(R.layout.activity_list_chooser);
-        api = new DiyanetApi();
 
         TextView mChooserTitle = (TextView) findViewById(R.id.chooser_title);
         mChooserTitle.setText(getString(R.string.choose_your_country));
 
-        mCountriesList = api.getCountriesList();
+        mCountriesList = new DiyanetApi().getCountriesList();
 
         mCountriesAdapter = new CountriesAdapter(this,
                 R.layout.item_radio, mCountriesList);

@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
+import retrofit.Callback;
+import retrofit.Response;
 import tr.xip.prayertimes.apdater.CountiesAdapter;
 import tr.xip.prayertimes.api.DiyanetApi;
 import tr.xip.prayertimes.api.objects.City;
@@ -25,11 +27,10 @@ import tr.xip.prayertimes.db.DatabaseManager;
 /**
  * Created by ix on 11/30/14.
  */
-public class CountyChooserActivity extends ActionBarActivity {
+public class CountyChooserActivity extends ActionBarActivity implements Callback<List<County>> {
     public static final String ARG_COUNTRY = "arg_country";
     public static final String ARG_CITY = "arg_city";
 
-    private DiyanetApi api;
     private DatabaseManager dbMan;
 
     private List<County> mCountiesList = new ArrayList<>();
@@ -47,7 +48,6 @@ public class CountyChooserActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.fade_in, R.anim.nothing);
         setContentView(R.layout.activity_list_chooser);
-        api = new DiyanetApi();
         dbMan = new DatabaseManager(this);
 
         Intent intent = getIntent();
@@ -76,7 +76,9 @@ public class CountyChooserActivity extends ActionBarActivity {
 
         mProgressBar = (SmoothProgressBar) findViewById(R.id.chooser_progress_bar);
 
-        new FetchCountiesTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        if (mCity != null && mCity.getId() != null) {
+            new DiyanetApi().getCountiesForCity(mCity.getId()).enqueue(this);
+        }
     }
 
     private void saveValuesAndExit(County county) {
@@ -110,56 +112,42 @@ public class CountyChooserActivity extends ActionBarActivity {
         finish();
     }
 
-    private class FetchCountiesTask extends AsyncTask<Void, Void, Boolean> {
+    @Override
+    public void onResponse(Response<List<County>> response) {
+        mCountiesList = response.body();
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
+        boolean countiesExist = false;
 
-            if (mProgressBar != null)
-                mProgressBar.setVisibility(View.VISIBLE);
+        if (mCountiesList != null) {
+            countiesExist = !(mCountiesList.size() <= 1 && mCountiesList.get(0).getError() != null);
         }
 
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            if (mCity != null && mCity.getId() != null) {
-                try {
-                    mCountiesList = api.getCountiesForCity(mCity.getId());
-                    return true;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return false;
+        if (countiesExist) {
+            mCountiesAdapter = new CountiesAdapter(CountyChooserActivity.this,
+                    R.layout.item_radio, mCountiesList);
+
+            mCountiesListView = (ListView) findViewById(R.id.chooser_list);
+            mCountiesListView.setAdapter(mCountiesAdapter);
+            mCountiesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    mCountiesAdapter.selectItem(position);
                 }
-            } else
-                return false;
+            });
+        } else {
+            saveValuesAndExit(null);
         }
 
-        @Override
-        protected void onPostExecute(Boolean success) {
-            super.onPostExecute(success);
-            boolean countiesExist = false;
+        end();
+    }
 
-            if (success)
-                countiesExist = !(mCountiesList.size() <= 1 && mCountiesList.get(0).getError() != null);
+    @Override
+    public void onFailure(Throwable t) {
+        // TODO
+        end();
+    }
 
-            if (countiesExist) {
-                mCountiesAdapter = new CountiesAdapter(CountyChooserActivity.this,
-                        R.layout.item_radio, mCountiesList);
-
-                mCountiesListView = (ListView) findViewById(R.id.chooser_list);
-                mCountiesListView.setAdapter(mCountiesAdapter);
-                mCountiesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        mCountiesAdapter.selectItem(position);
-                    }
-                });
-            } else {
-                saveValuesAndExit(null);
-            }
-
-            if (mProgressBar != null)
-                mProgressBar.setVisibility(View.GONE);
-        }
+    private void end() {
+        mProgressBar.setVisibility(View.INVISIBLE);
     }
 }

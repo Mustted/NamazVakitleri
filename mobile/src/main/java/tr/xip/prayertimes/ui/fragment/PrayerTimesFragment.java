@@ -1,4 +1,4 @@
-package tr.xip.prayertimes;
+package tr.xip.prayertimes.ui.fragment;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -16,12 +16,13 @@ import java.util.List;
 
 import retrofit.Callback;
 import retrofit.Response;
-import tr.xip.prayertimes.apdater.PrayerTimesAdapter;
+import tr.xip.prayertimes.R;
+import tr.xip.prayertimes.ui.apdater.PrayerTimesAdapter;
 import tr.xip.prayertimes.api.DiyanetApi;
 import tr.xip.prayertimes.api.objects.Location;
 import tr.xip.prayertimes.api.objects.PrayerTimes;
 import tr.xip.prayertimes.db.DatabaseManager;
-import tr.xip.prayertimes.widget.DividerItemDecoration;
+import tr.xip.prayertimes.ui.widget.DividerItemDecoration;
 
 /**
  * Created by ix on 12/4/14.

@@ -1,4 +1,4 @@
-package tr.xip.prayertimes.apdater;
+package tr.xip.prayertimes.ui.apdater;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,7 +11,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import tr.xip.prayertimes.R;
-import tr.xip.prayertimes.api.objects.Country;
 import tr.xip.prayertimes.api.objects.County;
 
 /**

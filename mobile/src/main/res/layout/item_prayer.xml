@@ -12,7 +12,7 @@
         android:orientation="horizontal"
         android:padding="16dp">
 
-        <tr.xip.prayertimes.widget.NotificationsToggle
+        <tr.xip.prayertimes.ui.widget.NotificationsToggle
             android:id="@+id/item_prayer_notifications_toggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
                 android:textColor="@color/text_gray"
                 android:textSize="16sp" />
 
-            <tr.xip.prayertimes.widget.RelativeTimeTextView
+            <tr.xip.prayertimes.ui.widget.RelativeTimeTextView
                 android:id="@+id/item_prayer_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

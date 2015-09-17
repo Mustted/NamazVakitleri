@@ -1,4 +1,4 @@
-package tr.xip.prayertimes;
+package tr.xip.prayertimes.ui.activty;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +13,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import tr.xip.prayertimes.apdater.CountriesAdapter;
+import tr.xip.prayertimes.R;
+import tr.xip.prayertimes.ui.apdater.CountriesAdapter;
 import tr.xip.prayertimes.api.DiyanetApi;
 import tr.xip.prayertimes.api.objects.Country;
 

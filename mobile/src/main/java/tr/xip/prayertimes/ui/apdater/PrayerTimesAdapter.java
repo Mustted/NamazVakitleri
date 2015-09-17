@@ -1,4 +1,4 @@
-package tr.xip.prayertimes.apdater;
+package tr.xip.prayertimes.ui.apdater;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -17,8 +17,8 @@ import java.util.Map;
 import tr.xip.prayertimes.R;
 import tr.xip.prayertimes.api.objects.Location;
 import tr.xip.prayertimes.db.DatabaseManager;
-import tr.xip.prayertimes.widget.NotificationsToggle;
-import tr.xip.prayertimes.widget.RelativeTimeTextView;
+import tr.xip.prayertimes.ui.widget.NotificationsToggle;
+import tr.xip.prayertimes.ui.widget.RelativeTimeTextView;
 
 /**
  * Created by ix on 12/1/14.

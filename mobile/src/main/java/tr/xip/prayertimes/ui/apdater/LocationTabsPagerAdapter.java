@@ -1,4 +1,4 @@
-package tr.xip.prayertimes.apdater;
+package tr.xip.prayertimes.ui.apdater;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import tr.xip.prayertimes.PrayerTimesFragment;
+import tr.xip.prayertimes.ui.fragment.PrayerTimesFragment;
 import tr.xip.prayertimes.api.objects.Location;
 
 /**

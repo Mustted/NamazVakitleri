@@ -1,4 +1,4 @@
-package tr.xip.prayertimes.apdater;
+package tr.xip.prayertimes.ui.apdater;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,20 +11,20 @@ import android.widget.TextView;
 import java.util.List;
 
 import tr.xip.prayertimes.R;
-import tr.xip.prayertimes.api.objects.Country;
+import tr.xip.prayertimes.api.objects.City;
 
 /**
  * Created by ix on 11/30/14.
  */
-public class CountriesAdapter extends ArrayAdapter<Country> {
+public class CitiesAdapter extends ArrayAdapter<City> {
 
     private Context context;
 
-    private List<Country> mItems;
+    private List<City> mItems;
 
     private int mSelectedPosition = 0;
 
-    public CountriesAdapter(Context context, int resource, List<Country> items) {
+    public CitiesAdapter(Context context, int resource, List<City> items) {
         super(context, resource, items);
         this.context = context;
         this.mItems = items;
@@ -38,7 +38,7 @@ public class CountriesAdapter extends ArrayAdapter<Country> {
             convertView = inflater.inflate(R.layout.item_radio, parent, false);
         }
 
-        Country item = mItems.get(position);
+        City item = mItems.get(position);
 
         TextView mName = (TextView) convertView.findViewById(R.id.item_radio_country_name);
         RadioButton mRadioButton = (RadioButton) convertView.findViewById(R.id.item_radio_country_radio);
@@ -61,7 +61,7 @@ public class CountriesAdapter extends ArrayAdapter<Country> {
         notifyDataSetInvalidated();
     }
 
-    public Country getSelectedCountry() {
+    public City getSelectedCity() {
         return mItems.get(mSelectedPosition);
     }
 }

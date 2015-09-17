@@ -1,4 +1,4 @@
-package tr.xip.prayertimes;
+package tr.xip.prayertimes.ui.activty;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,7 +16,8 @@ import com.astuetz.PagerSlidingTabStrip;
 import java.util.ArrayList;
 import java.util.List;
 
-import tr.xip.prayertimes.apdater.LocationTabsPagerAdapter;
+import tr.xip.prayertimes.R;
+import tr.xip.prayertimes.ui.apdater.LocationTabsPagerAdapter;
 import tr.xip.prayertimes.api.objects.Location;
 import tr.xip.prayertimes.db.DatabaseManager;
 

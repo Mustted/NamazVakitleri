@@ -1,7 +1,6 @@
-package tr.xip.prayertimes;
+package tr.xip.prayertimes.ui.activty;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -16,7 +15,8 @@ import java.util.List;
 import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 import retrofit.Callback;
 import retrofit.Response;
-import tr.xip.prayertimes.apdater.CitiesAdapter;
+import tr.xip.prayertimes.R;
+import tr.xip.prayertimes.ui.apdater.CitiesAdapter;
 import tr.xip.prayertimes.api.DiyanetApi;
 import tr.xip.prayertimes.api.objects.City;
 import tr.xip.prayertimes.api.objects.Country;

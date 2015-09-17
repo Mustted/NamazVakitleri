@@ -1,7 +1,5 @@
 package tr.xip.prayertimes.api;
 
-import com.google.gson.Gson;
-
 import java.util.List;
 
 import retrofit.Call;
@@ -18,39 +16,41 @@ import tr.xip.prayertimes.api.objects.PrayerTimes;
 public class DiyanetApi {
     private static final String API_HOST = "http://namazvakitleri.ahmeti.net/";
 
-    private List<Country> mCountriesList;
+    private static List<Country> sCountriesList;
 
-    private DiyanetService service;
+    private static DiyanetService sService;
 
-    public DiyanetApi() {
+    private DiyanetApi() {}
+
+    public static void init() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(API_HOST)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        service = retrofit.create(DiyanetService.class);
+        sService = retrofit.create(DiyanetService.class);
     }
 
-    public List<Country> getCountriesList() {
-        if (mCountriesList != null)
-            return mCountriesList;
+    public static List<Country> getCountriesList() {
+        if (sCountriesList != null)
+            return sCountriesList;
         else
-            return mCountriesList = ApiResources.getCountriesList();
+            return sCountriesList = ApiResources.getCountriesList();
     }
 
-    public Call<List<City>> getCitiesForCountry(String countryId) {
-        return service.getCitiesForCountry(countryId);
+    public static Call<List<City>> getCitiesForCountry(String countryId) {
+        return sService.getCitiesForCountry(countryId);
     }
 
-    public Call<List<County>> getCountiesForCity(String cityId) {
-        return service.getCountiesListForCity(cityId);
+    public static Call<List<County>> getCountiesForCity(String cityId) {
+        return sService.getCountiesListForCity(cityId);
     }
 
-    public Call<List<PrayerTimes>> getPrayerTimesForCity(String countryId, String cityId) {
-        return service.getPrayerTimesForCity(countryId, cityId, "aylik");
+    public static Call<List<PrayerTimes>> getPrayerTimesForCity(String countryId, String cityId) {
+        return sService.getPrayerTimesForCity(countryId, cityId, "aylik");
     }
 
-    public Call<List<PrayerTimes>> getPrayerTimesForCounty(String countryId, String cityId, String countyId) {
-        return service.getPrayerTimesForCounty(countryId, cityId, countyId, "aylik");
+    public static Call<List<PrayerTimes>> getPrayerTimesForCounty(String countryId, String cityId, String countyId) {
+        return sService.getPrayerTimesForCounty(countryId, cityId, countyId, "aylik");
     }
 }

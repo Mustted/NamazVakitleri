@@ -31,8 +31,6 @@ public class CountyChooserActivity extends ActionBarActivity implements Callback
     public static final String ARG_COUNTRY = "arg_country";
     public static final String ARG_CITY = "arg_city";
 
-    private DatabaseManager dbMan;
-
     private List<County> mCountiesList = new ArrayList<>();
 
     private ListView mCountiesListView;
@@ -48,7 +46,6 @@ public class CountyChooserActivity extends ActionBarActivity implements Callback
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.fade_in, R.anim.nothing);
         setContentView(R.layout.activity_list_chooser);
-        dbMan = new DatabaseManager(this);
 
         Intent intent = getIntent();
         mCountry = (Country) intent.getSerializableExtra(ARG_COUNTRY);
@@ -77,12 +74,12 @@ public class CountyChooserActivity extends ActionBarActivity implements Callback
         mProgressBar = (SmoothProgressBar) findViewById(R.id.chooser_progress_bar);
 
         if (mCity != null && mCity.getId() != null) {
-            new DiyanetApi().getCountiesForCity(mCity.getId()).enqueue(this);
+            DiyanetApi.getCountiesForCity(mCity.getId()).enqueue(this);
         }
     }
 
     private void saveValuesAndExit(County county) {
-        dbMan.addLocation(new Location(
+        DatabaseManager.addLocation(new Location(
                 mCountry.getId(),
                 mCountry.getName(),
                 mCity.getId(),

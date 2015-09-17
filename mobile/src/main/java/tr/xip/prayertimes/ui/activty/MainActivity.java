@@ -29,7 +29,6 @@ public class MainActivity extends ActionBarActivity {
 
     private Toolbar mToolbar;
 
-    private DatabaseManager dbMan;
     private SharedPreferences mSharedPrefs;
 
     private List<Location> mLocations = new ArrayList<>();
@@ -48,7 +47,6 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        dbMan = new DatabaseManager(this);
         mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -56,7 +54,7 @@ public class MainActivity extends ActionBarActivity {
 
         mFlipper = (ViewFlipper) findViewById(R.id.activity_main_flipper);
 
-        mLocations = dbMan.getLocations();
+        mLocations = DatabaseManager.getLocations();
 
         if (mLocations.size() > 0) {
             mAdapter = new LocationTabsPagerAdapter(
@@ -108,7 +106,7 @@ public class MainActivity extends ActionBarActivity {
                 int itemToRemovePos = currentPage;
                 if (currentPage > 0)
                     mViewPager.setCurrentItem(currentPage - 1);
-                dbMan.removeLocation(mAdapter.getDatabaseIdByPosition(itemToRemovePos));
+                DatabaseManager.removeLocation(mAdapter.getDatabaseIdByPosition(itemToRemovePos));
                 mAdapter.removeLocation(itemToRemovePos);
                 onTabsChanged();
                 break;

@@ -28,8 +28,6 @@ import tr.xip.prayertimes.db.DatabaseManager;
 public class CityChooserActivity extends ActionBarActivity implements Callback<List<City>> {
     public static final String ARG_COUNTRY = "arg_country";
 
-    private DatabaseManager dbMan;
-
     private List<City> mCitiesList = new ArrayList<>();
 
     private ListView mCitiesListView;
@@ -44,7 +42,6 @@ public class CityChooserActivity extends ActionBarActivity implements Callback<L
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.fade_in, R.anim.nothing);
         setContentView(R.layout.activity_list_chooser);
-        dbMan = new DatabaseManager(this);
 
         mCountry = (Country) getIntent().getSerializableExtra(ARG_COUNTRY);
 
@@ -77,7 +74,7 @@ public class CityChooserActivity extends ActionBarActivity implements Callback<L
         mProgressBar = (SmoothProgressBar) findViewById(R.id.chooser_progress_bar);
 
         if (mCountry != null && mCountry.getId() != null) {
-            new DiyanetApi().getCitiesForCountry(mCountry.getId()).enqueue(this);
+            DiyanetApi.getCitiesForCountry(mCountry.getId()).enqueue(this);
         }
     }
 

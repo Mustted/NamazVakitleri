@@ -140,7 +140,7 @@ public class PrayerTimesAdapter extends RecyclerView.Adapter<PrayerTimesAdapter.
                 break;
         }
 
-        new DatabaseManager(context).updateLocation(mLocation);
+        DatabaseManager.updateLocation(mLocation);
     }
 
     @Override

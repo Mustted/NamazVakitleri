@@ -37,8 +37,6 @@ public class PrayerTimesFragment extends Fragment {
 
     private Context context;
 
-    private DatabaseManager dbMan;
-
     private View rootView;
 
     private Location mLocation;
@@ -55,7 +53,6 @@ public class PrayerTimesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.context = getActivity();
-        this.dbMan = new DatabaseManager(context);
 
         if (savedInstanceState != null)
             mPrayerTimes = (PrayerTimes) savedInstanceState.get(STATE_PRAYER_TIMES);
@@ -122,7 +119,7 @@ public class PrayerTimesFragment extends Fragment {
             cal.set(Calendar.MILLISECOND, 0);
             long now = cal.getTimeInMillis();
 
-            mPrayerTimes = dbMan.getPrayerTimes(mLocation.getDatabaseId(), now);
+            mPrayerTimes = DatabaseManager.getPrayerTimes(mLocation.getDatabaseId(), now);
 
             return mPrayerTimes != null;
         }
@@ -139,13 +136,13 @@ public class PrayerTimesFragment extends Fragment {
                 }
 
                 if (locationHasCountyValue()) {
-                    new DiyanetApi().getPrayerTimesForCounty(
+                    DiyanetApi.getPrayerTimesForCounty(
                             mLocation.getCountryId(),
                             mLocation.getCityId(),
                             mLocation.getCountyId()
                     ).enqueue(new PrayerTimesListCallback());
                 } else {
-                    new DiyanetApi().getPrayerTimesForCity(
+                    DiyanetApi.getPrayerTimesForCity(
                             mLocation.getCountryId(),
                             mLocation.getCityId()
                     ).enqueue(new PrayerTimesListCallback());
@@ -164,7 +161,7 @@ public class PrayerTimesFragment extends Fragment {
                 List<PrayerTimes> mPrayerTimesList = response.body();
 
                 if (mPrayerTimesList != null) {
-                    dbMan.addPrayerTimes(mPrayerTimesList, mLocation.getDatabaseId());
+                    DatabaseManager.addPrayerTimes(mPrayerTimesList, mLocation.getDatabaseId());
 
                     new LoadPrayerTimesForTodayTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 } else {

@@ -14,20 +14,20 @@ import tr.xip.prayertimes.api.objects.PrayerTimes;
 import tr.xip.prayertimes.db.table.LocationsTable;
 import tr.xip.prayertimes.db.table.PrayerTimesTable;
 
+import static tr.xip.prayertimes.ui.app.NamazVakitleriApplication.getContext;
+
 /**
  * Created by ix on 12/1/14.
  */
 public class DatabaseManager {
-    Context context;
-
-    SQLiteDatabase db;
+    private static SQLiteDatabase sDb;
 
     public static final String SORT_ASCN = " ASC";
     public static final String SORT_DESC = " DESC";
 
-    private final String TAG = "Database Manager";
+    private static final String TAG = "Database Manager";
 
-    String[] prayerTimesProjection = {
+    public static String[] prayerTimesProjection = {
             PrayerTimesTable.COLUMN_NAME_ID,
             PrayerTimesTable.COLUMN_NAME_LOCATION,
             PrayerTimesTable.COLUMN_NAME_DATE,
@@ -39,7 +39,7 @@ public class DatabaseManager {
             PrayerTimesTable.COLUMN_NAME_ISHA
     };
 
-    String[] locationsProjection = {
+    public static String[] locationsProjection = {
             LocationsTable.COLUMN_ID,
             LocationsTable.COLUMN_COUNTRY_ID,
             LocationsTable.COLUMN_COUNTRY_NAME,
@@ -49,12 +49,13 @@ public class DatabaseManager {
             LocationsTable.COLUMN_COUNTY_NAME,
     };
 
-    public DatabaseManager(Context context) {
-        this.context = context;
-        this.db = new DatabaseHelper(context).getWritableDatabase();
+    private DatabaseManager() {}
+
+    public static void init() {
+        sDb = new DatabaseHelper(getContext()).getWritableDatabase();
     }
 
-    public long addLocation(Location location) {
+    public static long addLocation(Location location) {
         ContentValues values = new ContentValues();
         values.put(LocationsTable.COLUMN_COUNTRY_ID, location.getCountryId());
         values.put(LocationsTable.COLUMN_COUNTRY_NAME, location.getCountryName());
@@ -69,10 +70,10 @@ public class DatabaseManager {
         values.put(LocationsTable.COLUMN_NAME_NOTIF_MAGHRIB, location.getMaghribNotification());
         values.put(LocationsTable.COLUMN_NAME_NOTIF_ISHA, location.getIshaNotification());
 
-        return db.insert(LocationsTable.TABLE_NAME, LocationsTable.COLUMN_NULLABLE, values);
+        return sDb.insert(LocationsTable.TABLE_NAME, LocationsTable.COLUMN_NULLABLE, values);
     }
 
-    public int updateLocation(Location location) {
+    public static int updateLocation(Location location) {
         ContentValues values = new ContentValues();
         values.put(LocationsTable.COLUMN_COUNTRY_ID, location.getCountryId());
         values.put(LocationsTable.COLUMN_COUNTRY_NAME, location.getCountryName());
@@ -90,26 +91,26 @@ public class DatabaseManager {
         String where = LocationsTable.COLUMN_ID + " = ?";
         String[] whereArgs = new String[]{String.valueOf(location.getDatabaseId())};
 
-        return db.update(LocationsTable.TABLE_NAME, values, where, whereArgs);
+        return sDb.update(LocationsTable.TABLE_NAME, values, where, whereArgs);
     }
 
-    public void removeLocation(int locationId) {
+    public static void removeLocation(int locationId) {
         String selection = LocationsTable.COLUMN_ID + " = ?";
         String[] selectionArgs = new String[]{String.valueOf(locationId)};
 
-        db.delete(LocationsTable.TABLE_NAME, selection, selectionArgs);
+        sDb.delete(LocationsTable.TABLE_NAME, selection, selectionArgs);
 
         selection = PrayerTimesTable.COLUMN_NAME_LOCATION + " = ?";
 
-        db.delete(PrayerTimesTable.TABLE_NAME, selection, selectionArgs);
+        sDb.delete(PrayerTimesTable.TABLE_NAME, selection, selectionArgs);
     }
 
-    public List<Location> getLocations() {
+    public static List<Location> getLocations() {
         List<Location> list = new ArrayList<>();
 
         String selectQuery = "SELECT * FROM " + LocationsTable.TABLE_NAME;
 
-        Cursor c = db.rawQuery(selectQuery, null);
+        Cursor c = sDb.rawQuery(selectQuery, null);
 
         if (c != null && c.moveToFirst()) {
             do {
@@ -151,7 +152,7 @@ public class DatabaseManager {
         return list;
     }
 
-    public PrayerTimes getPrayerTimes(int locationId, long date) {
+    public static PrayerTimes getPrayerTimes(int locationId, long date) {
 
         String sortOrder =
                 PrayerTimesTable.COLUMN_NAME_DATE + SORT_ASCN;
@@ -163,7 +164,7 @@ public class DatabaseManager {
                 String.valueOf(date)
         };
 
-        Cursor c = db.query(
+        Cursor c = sDb.query(
                 PrayerTimesTable.TABLE_NAME,
                 prayerTimesProjection,
                 selection,
@@ -190,7 +191,7 @@ public class DatabaseManager {
         }
     }
 
-    public void addPrayerTimes(List<PrayerTimes> list, int locationId) {
+    public static void addPrayerTimes(List<PrayerTimes> list, int locationId) {
         for (PrayerTimes prayerTimes : list) {
             ContentValues values = new ContentValues();
             values.put(PrayerTimesTable.COLUMN_NAME_LOCATION, locationId);
@@ -202,7 +203,7 @@ public class DatabaseManager {
             values.put(PrayerTimesTable.COLUMN_NAME_MAGHRIB, prayerTimes.getMaghrib());
             values.put(PrayerTimesTable.COLUMN_NAME_ISHA, prayerTimes.getIsha());
 
-            db.insert(PrayerTimesTable.TABLE_NAME, PrayerTimesTable.COLUMN_NULLABLE, values);
+            sDb.insert(PrayerTimesTable.TABLE_NAME, PrayerTimesTable.COLUMN_NULLABLE, values);
         }
     }
 }

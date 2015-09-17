@@ -13,7 +13,7 @@ import tr.xip.prayertimes.db.table.PrayerTimesTable;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "prayer_times_database.db";
+    public static final String DATABASE_NAME = "prayer_times_database.sDb";
 
     private final String TAG = "Database Helper";
 

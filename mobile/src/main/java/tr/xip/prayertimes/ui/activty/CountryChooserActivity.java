@@ -36,7 +36,7 @@ public class CountryChooserActivity extends ActionBarActivity {
         TextView mChooserTitle = (TextView) findViewById(R.id.chooser_title);
         mChooserTitle.setText(getString(R.string.choose_your_country));
 
-        mCountriesList = new DiyanetApi().getCountriesList();
+        mCountriesList = DiyanetApi.getCountriesList();
 
         mCountriesAdapter = new CountriesAdapter(this,
                 R.layout.item_radio, mCountriesList);

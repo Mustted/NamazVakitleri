@@ -193,12 +193,12 @@ public class DatabaseManager {
             ContentValues values = new ContentValues();
             values.put(PrayerTimesTable.COLUMN_NAME_LOCATION, locationId);
             values.put(PrayerTimesTable.COLUMN_NAME_DATE, prayerTimes.getDate());
-            values.put(PrayerTimesTable.COLUMN_NAME_FAJR, prayerTimes.getFajr());
-            values.put(PrayerTimesTable.COLUMN_NAME_SUNRISE, prayerTimes.getSunrise());
-            values.put(PrayerTimesTable.COLUMN_NAME_DHUHR, prayerTimes.getDhuhr());
-            values.put(PrayerTimesTable.COLUMN_NAME_ASR, prayerTimes.getAsr());
-            values.put(PrayerTimesTable.COLUMN_NAME_MAGHRIB, prayerTimes.getMaghrib());
-            values.put(PrayerTimesTable.COLUMN_NAME_ISHA, prayerTimes.getIsha());
+            values.put(PrayerTimesTable.COLUMN_NAME_FAJR, prayerTimes.getFajr().getTime());
+            values.put(PrayerTimesTable.COLUMN_NAME_SUNRISE, prayerTimes.getSunrise().getTime());
+            values.put(PrayerTimesTable.COLUMN_NAME_DHUHR, prayerTimes.getDhuhr().getTime());
+            values.put(PrayerTimesTable.COLUMN_NAME_ASR, prayerTimes.getAsr().getTime());
+            values.put(PrayerTimesTable.COLUMN_NAME_MAGHRIB, prayerTimes.getMaghrib().getTime());
+            values.put(PrayerTimesTable.COLUMN_NAME_ISHA, prayerTimes.getIsha().getTime());
 
             sDb.insert(PrayerTimesTable.TABLE_NAME, PrayerTimesTable.COLUMN_NULLABLE, values);
         }

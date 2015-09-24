@@ -6,4 +6,7 @@
     <dimen name="margin_tabs_top">0dp</dimen>
 
     <dimen name="toolbar_padding_top">32dp</dimen>
+
+    <dimen name="padding_prayer_times_end">48dp</dimen>
+    <dimen name="padding_prayer_times_side">224dp</dimen>
 </resources>

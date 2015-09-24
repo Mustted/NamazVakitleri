@@ -1,0 +1,21 @@
+<!-- This is a layout to easily simulate how a list of prayer times cards will look in a RecyclerView -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/padding_prayer_times_end"
+    android:paddingLeft="@dimen/padding_prayer_times_side"
+    android:paddingRight="@dimen/padding_prayer_times_side"
+    android:paddingTop="@dimen/padding_prayer_times_end">
+
+    <include layout="@layout/item_prayer" />
+
+    <include layout="@layout/item_prayer" />
+
+    <include layout="@layout/item_prayer_current" />
+
+    <include layout="@layout/item_prayer" />
+
+    <include layout="@layout/item_prayer" />
+</LinearLayout>

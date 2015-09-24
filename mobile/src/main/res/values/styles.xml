@@ -4,6 +4,5 @@
         <item name="colorPrimary">@color/apptheme_primary</item>
         <item name="colorPrimaryDark">@color/apptheme_primary_dark</item>
         <item name="colorAccent">@color/apptheme_accent</item>
-        <item name="android:windowBackground">@color/background_window</item>
     </style>
 </resources>

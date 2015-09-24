@@ -5,7 +5,7 @@
     <color name="apptheme_primary_dark">#455A64</color>
     <color name="apptheme_accent">#FF4081</color>
 
-    <color name="background_window">#eeeeee</color>
+    <color name="background_window">#dddddd</color>
     <color name="background_toolbar_setup">#eeeeee</color>
 
     <color name="text_gray">#656565</color>
@@ -17,5 +17,5 @@
     <color name="selector_dark">#30000000</color>
     <color name="selector_dark_stroke">#50000000</color>
 
-    <color name="oval_gray_light">#efefef</color>
+    <color name="gray_light">#efefef</color>
 </resources>

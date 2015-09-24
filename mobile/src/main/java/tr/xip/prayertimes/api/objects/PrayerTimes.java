@@ -4,7 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
+
+import tr.xip.prayertimes.Utils;
 
 public class PrayerTimes implements Serializable {
     @SerializedName("Tarih")
@@ -32,53 +33,53 @@ public class PrayerTimes implements Serializable {
     private String qibla;
 
     private long dateTimestamp;
-    private long fajrTimestamp;
-    private long sunriseTimestamp;
-    private long dhuhrTimestamp;
-    private long asrTimestamp;
-    private long maghribTimestamp;
-    private long ishaTimestamp;
+    private PrayerTime fajrPrayerTime;
+    private PrayerTime sunrisePrayerTime;
+    private PrayerTime dhuhrPrayerTime;
+    private PrayerTime asrPrayerTime;
+    private PrayerTime maghribPrayerTime;
+    private PrayerTime ishaPrayerTime;
 
     public PrayerTimes(long date, long fajr, long sunrise, long dhuhr, long asr, long maghrib, long isha) {
         this.dateTimestamp = date;
-        this.fajrTimestamp = fajr;
-        this.sunriseTimestamp = sunrise;
-        this.dhuhrTimestamp = dhuhr;
-        this.asrTimestamp = asr;
-        this.maghribTimestamp = maghrib;
-        this.ishaTimestamp = isha;
+        this.fajrPrayerTime = new PrayerTime(PrayerTime.Type.FAJR, fajr);
+        this.sunrisePrayerTime = new PrayerTime(PrayerTime.Type.SUNRISE, sunrise);
+        this.dhuhrPrayerTime = new PrayerTime(PrayerTime.Type.DHUHR, dhuhr);
+        this.asrPrayerTime = new PrayerTime(PrayerTime.Type.ASR, asr);
+        this.maghribPrayerTime = new PrayerTime(PrayerTime.Type.MAGHRIB, maghrib);
+        this.ishaPrayerTime = new PrayerTime(PrayerTime.Type.ISHA, isha);
     }
 
     public long getDate() {
-        return dateTimestamp != 0 ? dateTimestamp : getTimestampFromDate(date);
+        return dateTimestamp != 0 ? dateTimestamp : Utils.getTimestampFromDate(date);
     }
 
-    public long getFajr() {
-        return fajrTimestamp != 0 ? fajrTimestamp : getTimestampFromDateTime(date, fajr);
+    public PrayerTime getFajr() {
+        return fajrPrayerTime != null ? fajrPrayerTime : new PrayerTime(PrayerTime.Type.FAJR, date, fajr);
     }
 
-    public long getSunrise() {
-        return sunriseTimestamp != 0 ? sunriseTimestamp : getTimestampFromDateTime(date, sunrise);
+    public PrayerTime getSunrise() {
+        return sunrisePrayerTime != null ? sunrisePrayerTime : new PrayerTime(PrayerTime.Type.SUNRISE, date, sunrise);
     }
 
-    public long getDhuhr() {
-        return dhuhrTimestamp != 0 ? dhuhrTimestamp : getTimestampFromDateTime(date, dhuhr);
+    public PrayerTime getDhuhr() {
+        return dhuhrPrayerTime != null ? dhuhrPrayerTime : new PrayerTime(PrayerTime.Type.DHUHR, date, dhuhr);
     }
 
-    public long getAsr() {
-        return asrTimestamp != 0 ? asrTimestamp : getTimestampFromDateTime(date, asr);
+    public PrayerTime getAsr() {
+        return asrPrayerTime != null ? asrPrayerTime : new PrayerTime(PrayerTime.Type.ASR, date, asr);
     }
 
-    public long getMaghrib() {
-        return maghribTimestamp != 0 ? maghribTimestamp : getTimestampFromDateTime(date, maghrib);
+    public PrayerTime getMaghrib() {
+        return maghribPrayerTime != null ? maghribPrayerTime : new PrayerTime(PrayerTime.Type.MAGHRIB, date, maghrib);
     }
 
-    public long getIsha() {
-        return ishaTimestamp != 0 ? ishaTimestamp : getTimestampFromDateTime(date, isha);
+    public PrayerTime getIsha() {
+        return ishaPrayerTime != null ? ishaPrayerTime : new PrayerTime(PrayerTime.Type.ISHA, date, isha);
     }
 
-    public ArrayList<Long> getPrayerTimesArrayList() {
-        ArrayList<Long> list = new ArrayList<>();
+    public ArrayList<PrayerTime> getPrayerTimesList() {
+        ArrayList<PrayerTime> list = new ArrayList<>();
         list.add(getFajr());
         list.add(getSunrise());
         list.add(getDhuhr());
@@ -91,46 +92,5 @@ public class PrayerTimes implements Serializable {
     public String getQibla() {
         return qibla;
         // TODO: figure out what to do with this
-    }
-
-    private long getTimestampFromDateTime(String date, String time) {
-        String[] dateParts = date.split("\\.");
-        String[] timeParts = time.split(":");
-
-        int day = Integer.parseInt(dateParts[0]);
-        int month = Integer.parseInt(dateParts[1]);
-        int year = Integer.parseInt(dateParts[2]);
-        int hour = Integer.parseInt(timeParts[0]);
-        int minute = Integer.parseInt(timeParts[1]);
-
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, year);
-        cal.set(Calendar.MONTH, month - 1);
-        cal.set(Calendar.DAY_OF_MONTH, day);
-        cal.set(Calendar.HOUR_OF_DAY, hour);
-        cal.set(Calendar.MINUTE, minute);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-
-        return cal.getTimeInMillis();
-    }
-
-    private long getTimestampFromDate(String date) {
-        String[] dateParts = date.split("\\.");
-
-        int day = Integer.parseInt(dateParts[0]);
-        int month = Integer.parseInt(dateParts[1]);
-        int year = Integer.parseInt(dateParts[2]);
-
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, year);
-        cal.set(Calendar.MONTH, month - 1);
-        cal.set(Calendar.DAY_OF_MONTH, day);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-
-        return cal.getTimeInMillis();
     }
 }

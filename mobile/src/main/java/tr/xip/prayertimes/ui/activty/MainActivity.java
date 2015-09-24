@@ -20,6 +20,8 @@ import tr.xip.prayertimes.R;
 import tr.xip.prayertimes.ui.apdater.LocationTabsPagerAdapter;
 import tr.xip.prayertimes.api.objects.Location;
 import tr.xip.prayertimes.db.DatabaseManager;
+import tr.xip.prayertimes.ui.apdater.PrayerTimesAdapter;
+import tr.xip.prayertimes.util.RemainingTimeCounter;
 
 public class MainActivity extends ActionBarActivity {
     private static final String PREF_LAST_LOCATION = "pref_last_location";

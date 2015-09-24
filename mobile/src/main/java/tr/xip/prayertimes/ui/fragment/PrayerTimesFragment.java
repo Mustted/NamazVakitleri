@@ -22,7 +22,7 @@ import tr.xip.prayertimes.api.DiyanetApi;
 import tr.xip.prayertimes.api.objects.Location;
 import tr.xip.prayertimes.api.objects.PrayerTimes;
 import tr.xip.prayertimes.db.DatabaseManager;
-import tr.xip.prayertimes.ui.widget.DividerItemDecoration;
+import tr.xip.prayertimes.util.RemainingTimeCounter;
 
 public class PrayerTimesFragment extends Fragment {
     public static final String ARG_LOCATION = "arg_location";
@@ -70,8 +70,6 @@ public class PrayerTimesFragment extends Fragment {
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.prayer_times_recycler);
         mLayoutManager = new LinearLayoutManager(context);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(context,
-                DividerItemDecoration.VERTICAL_LIST));
 
         if (mPrayerTimes != null) {
             displayPrayerTimes();
@@ -80,6 +78,20 @@ public class PrayerTimesFragment extends Fragment {
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mAdapter != null) {
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        RemainingTimeCounter.cancelIfInstanceExists();
     }
 
     @Override
@@ -94,9 +106,11 @@ public class PrayerTimesFragment extends Fragment {
 
     private void displayPrayerTimes() {
         if (mPrayerTimes != null) {
-            mAdapter = new PrayerTimesAdapter(context, mPrayerTimes.getPrayerTimesArrayList(), mLocation);
+            mAdapter = new PrayerTimesAdapter(mPrayerTimes.getPrayerTimesList());
             if (mRecyclerView != null) {
                 mRecyclerView.setAdapter(mAdapter);
+                // TODO: Implementation
+                // mRecyclerView.smoothScrollToPosition(mAdapter.getCurrentPrayerTimePosition());
             }
         }
     }

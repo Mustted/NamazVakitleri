@@ -12,5 +12,7 @@
 
     <dimen name="toolbar_padding_side">0dp</dimen>
     <dimen name="toolbar_padding_top">0dp</dimen>
-    <dimen name="padding_prayer_times_side">@dimen/toolbar_padding_side</dimen>
+
+    <dimen name="padding_prayer_times_end">4dp</dimen>
+    <dimen name="padding_prayer_times_side">4dp</dimen>
 </resources>

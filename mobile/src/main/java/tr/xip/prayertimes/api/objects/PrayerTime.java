@@ -2,12 +2,14 @@ package tr.xip.prayertimes.api.objects;
 
 import android.graphics.drawable.Drawable;
 
+import java.io.Serializable;
+
 import tr.xip.prayertimes.R;
 import tr.xip.prayertimes.Utils;
 
 import static tr.xip.prayertimes.ui.app.NamazVakitleriApplication.getContext;
 
-public class PrayerTime {
+public class PrayerTime implements Serializable {
     private long time;
     private Type type;
 

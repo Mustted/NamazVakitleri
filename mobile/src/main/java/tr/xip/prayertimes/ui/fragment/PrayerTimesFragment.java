@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import java.util.Calendar;
@@ -45,6 +46,14 @@ public class PrayerTimesFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private PrayerTimesAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+
+    public static PrayerTimesFragment newInstance(Location location) {
+        PrayerTimesFragment fragment = new PrayerTimesFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_LOCATION, location);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

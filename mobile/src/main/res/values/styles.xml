@@ -5,4 +5,11 @@
         <item name="colorPrimaryDark">@color/apptheme_primary_dark</item>
         <item name="colorAccent">@color/apptheme_accent</item>
     </style>
+
+    <style name="AppTheme.ActionBar.Spinner" parent="Widget.AppCompat.Light.Spinner.DropDown.ActionBar">
+        <item name="android:background">@drawable/selector_light_no_mask</item>
+        <item name="android:dropDownSelector">@drawable/selector_dark</item>
+        <item name="android:divider">@null</item>
+        <item name="overlapAnchor">true</item>
+    </style>
 </resources>

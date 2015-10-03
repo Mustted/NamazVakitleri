@@ -13,6 +13,7 @@ import tr.xip.prayertimes.api.objects.Location;
 import tr.xip.prayertimes.api.objects.PrayerTimes;
 import tr.xip.prayertimes.db.table.LocationsTable;
 import tr.xip.prayertimes.db.table.PrayerTimesTable;
+import tr.xip.prayertimes.util.LocationsList;
 
 import static tr.xip.prayertimes.ui.app.NamazVakitleriApplication.getContext;
 
@@ -102,8 +103,8 @@ public class DatabaseManager {
         sDb.delete(PrayerTimesTable.TABLE_NAME, selection, selectionArgs);
     }
 
-    public static List<Location> getLocations() {
-        List<Location> list = new ArrayList<>();
+    public static LocationsList getLocations() {
+        LocationsList list = new LocationsList();
 
         String selectQuery = "SELECT * FROM " + LocationsTable.TABLE_NAME;
 

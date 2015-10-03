@@ -74,6 +74,10 @@ public class Location implements Serializable {
         return countyName;
     }
 
+    public String getName() {
+        return countyName != null ? countyName : cityName;
+    }
+
     public void setFajrNotification(int notification) {
         fajrNotification = notification;
     }

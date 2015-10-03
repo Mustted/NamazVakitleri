@@ -1,27 +1,30 @@
 package tr.xip.prayertimes.ui.activty;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 import android.widget.ViewFlipper;
 
-import com.astuetz.PagerSlidingTabStrip;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import tr.xip.prayertimes.R;
-import tr.xip.prayertimes.ui.apdater.LocationTabsPagerAdapter;
+import tr.xip.prayertimes.Utils;
 import tr.xip.prayertimes.api.objects.Location;
 import tr.xip.prayertimes.db.DatabaseManager;
-import tr.xip.prayertimes.ui.apdater.PrayerTimesAdapter;
-import tr.xip.prayertimes.util.RemainingTimeCounter;
+import tr.xip.prayertimes.ui.apdater.LocationsSpinnerAdapter;
+import tr.xip.prayertimes.ui.fragment.PrayerTimesFragment;
+import tr.xip.prayertimes.ui.widget.OnItemSelectedListenerAdapter;
+import tr.xip.prayertimes.util.LocationsList;
 
 public class MainActivity extends ActionBarActivity {
     private static final String PREF_LAST_LOCATION = "pref_last_location";
@@ -33,17 +36,18 @@ public class MainActivity extends ActionBarActivity {
 
     private SharedPreferences mSharedPrefs;
 
-    private List<Location> mLocations = new ArrayList<>();
+    private LocationsList mLocations = new LocationsList();
 
-    private ViewPager mViewPager;
-    private LocationTabsPagerAdapter mAdapter;
-    private PagerSlidingTabStrip mTabs;
+    private Spinner mLocationsSpinner;
+    private LocationsSpinnerAdapter mAdapter;
 
     private ViewFlipper mFlipper;
 
     private MenuItem mRemoveItem;
 
-    private int mCurrentPage;
+    private PrayerTimesFragment mFragment;
+
+    private Location mCurrentLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,42 +56,21 @@ public class MainActivity extends ActionBarActivity {
         mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setContentInsetsAbsolute(Utils.dpToPx(8), mToolbar.getContentInsetRight());
         setSupportActionBar(mToolbar);
+        //noinspection ConstantConditions
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         mFlipper = (ViewFlipper) findViewById(R.id.activity_main_flipper);
 
         mLocations = DatabaseManager.getLocations();
 
         if (mLocations.size() > 0) {
-            mAdapter = new LocationTabsPagerAdapter(
-                    getSupportFragmentManager(), mLocations);
-            mViewPager = (ViewPager) findViewById(R.id.activity_main_view_pager);
-            mViewPager.setAdapter(mAdapter);
-
-            mTabs = (PagerSlidingTabStrip) findViewById(R.id.activity_main_pager_tabs);
-            mTabs.setViewPager(mViewPager);
-            mTabs.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                }
-
-                @Override
-                public void onPageSelected(int position) {
-                    mCurrentPage = position;
-                    mSharedPrefs.edit().putInt(PREF_LAST_LOCATION, position).commit();
-                }
-
-                @Override
-                public void onPageScrollStateChanged(int position) {
-
-                }
-            });
-
-            mViewPager.setCurrentItem(mSharedPrefs.getInt(PREF_LAST_LOCATION, 0));
-        } else {
-            mFlipper.setDisplayedChild(FLIPPER_NO_LOCATIONS);
+            setUpLocationsSpinner();
+            setContent(mLocations.findById(mSharedPrefs.getInt(PREF_LAST_LOCATION, -1)));
         }
+
+        notifyChange();
     }
 
     @Override
@@ -99,20 +82,18 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case R.id.action_add_new_location:
                 startActivity(new Intent(this, CountryChooserActivity.class));
                 finish();
                 break;
             case R.id.action_remove_location:
-                int itemToRemovePos = mCurrentPage;
-                if (mCurrentPage > 0) {
-                    mViewPager.setCurrentItem(mCurrentPage - 1);
-                }
-                DatabaseManager.removeLocation(mAdapter.getDatabaseIdByPosition(itemToRemovePos));
-                mAdapter.removeLocation(itemToRemovePos);
-                onTabsChanged();
+                DatabaseManager.removeLocation(mCurrentLocation.getDatabaseId());
+                mAdapter.remove(mCurrentLocation);
+                /*if (mCurrentItemPosition > 0) {
+                    mLocationsSpinner.setSelection(mCurrentItemPosition - 1);
+                }*/
+                notifyChange();
                 break;
             case R.id.action_settings:
                 // ...
@@ -122,19 +103,53 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void onTabsChanged() {
-        mTabs.notifyDataSetChanged();
+    private void setContent(Location location) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, PrayerTimesFragment.newInstance(location))
+                .commit();
+    }
 
-        if (mAdapter.getCount() == 0) {
+    private void notifyChange() {
+        if (mLocations.size() > 0) {
+            mFlipper.setDisplayedChild(FLIPPER_CONTENT);
+        } else {
             mFlipper.setDisplayedChild(FLIPPER_NO_LOCATIONS);
         }
+    }
 
-        if (mRemoveItem != null) {
-            if (mLocations.size() == 0) {
-                mRemoveItem.setVisible(false);
-            } else {
-                mRemoveItem.setVisible(true);
-            }
+    private void setUpLocationsSpinner() {
+        //noinspection ConstantConditions
+        mAdapter = new LocationsSpinnerAdapter(this,
+                R.layout.item_spinner_toolbar_selected,
+                mLocations
+        );
+        mAdapter.setDropDownViewResource(R.layout.item_spinner_toolbar);
+
+        mLocationsSpinner = (Spinner) LayoutInflater.from(this).inflate(
+                R.layout.view_toolbar_spinner,
+                mToolbar,
+                false
+        );
+        ActionBar.LayoutParams params = new ActionBar.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        mToolbar.addView(mLocationsSpinner, params);
+
+        mLocationsSpinner.setAdapter(mAdapter);
+
+        mLocationsSpinner.setOnItemSelectedListener(new OnLocationSelectedListener());
+    }
+
+    private class OnLocationSelectedListener extends OnItemSelectedListenerAdapter {
+
+        @SuppressLint("CommitPrefEdits")
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            mCurrentLocation = mAdapter.getItem(position);
+            setContent(mCurrentLocation);
+
+            mSharedPrefs.edit().putInt(PREF_LAST_LOCATION, mCurrentLocation.getDatabaseId()).commit();
+
+            notifyChange();
         }
     }
 }

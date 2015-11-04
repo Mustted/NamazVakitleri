@@ -15,6 +15,7 @@ import java.util.List;
 import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 import retrofit.Callback;
 import retrofit.Response;
+import retrofit.Retrofit;
 import tr.xip.prayertimes.R;
 import tr.xip.prayertimes.ui.apdater.CountiesAdapter;
 import tr.xip.prayertimes.api.DiyanetApi;
@@ -107,7 +108,7 @@ public class CountyChooserActivity extends ActionBarActivity implements Callback
     }
 
     @Override
-    public void onResponse(Response<List<County>> response) {
+    public void onResponse(Response<List<County>> response, Retrofit retrofit) {
         mCountiesList = response.body();
 
         boolean countiesExist = false;

@@ -15,11 +15,17 @@
         android:paddingRight="@dimen/toolbar_padding_side"
         android:paddingTop="@dimen/toolbar_padding_top">
 
-        <include layout="@layout/toolbar" />
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/apptheme_primary"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
     </FrameLayout>
 
     <ViewFlipper
-        android:id="@+id/activity_main_flipper"
+        android:id="@+id/flipper"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:inAnimation="@anim/abc_fade_in"

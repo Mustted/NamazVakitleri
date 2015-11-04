@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tr.xip.prayertimes.R;
+import tr.xip.prayertimes.ui.activity.MainActivity;
 import tr.xip.prayertimes.ui.apdater.CountriesAdapter;
 import tr.xip.prayertimes.api.DiyanetApi;
 import tr.xip.prayertimes.api.objects.Country;

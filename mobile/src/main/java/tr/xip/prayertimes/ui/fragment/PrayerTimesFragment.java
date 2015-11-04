@@ -17,6 +17,7 @@ import java.util.List;
 
 import retrofit.Callback;
 import retrofit.Response;
+import retrofit.Retrofit;
 import tr.xip.prayertimes.R;
 import tr.xip.prayertimes.ui.apdater.PrayerTimesAdapter;
 import tr.xip.prayertimes.api.DiyanetApi;
@@ -182,7 +183,7 @@ public class PrayerTimesFragment extends Fragment {
         private class PrayerTimesListCallback implements Callback<List<PrayerTimes>> {
 
             @Override
-            public void onResponse(Response<List<PrayerTimes>> response) {
+            public void onResponse(Response<List<PrayerTimes>> response, Retrofit retrofit) {
                 List<PrayerTimes> mPrayerTimesList = response.body();
 
                 if (mPrayerTimesList != null) {

@@ -15,6 +15,7 @@ import java.util.List;
 import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 import retrofit.Callback;
 import retrofit.Response;
+import retrofit.Retrofit;
 import tr.xip.prayertimes.R;
 import tr.xip.prayertimes.ui.apdater.CitiesAdapter;
 import tr.xip.prayertimes.api.DiyanetApi;
@@ -92,25 +93,25 @@ public class CityChooserActivity extends ActionBarActivity implements Callback<L
     }
 
     @Override
-    public void onResponse(Response<List<City>> response) {
+    public void onResponse(Response<List<City>> response, Retrofit retrofit) {
         if ((mCitiesList = response.body()) != null) {
-                mCitiesAdapter = new CitiesAdapter(CityChooserActivity.this,
-                        R.layout.item_radio, mCitiesList);
+            mCitiesAdapter = new CitiesAdapter(CityChooserActivity.this,
+                    R.layout.item_radio, mCitiesList);
 
-                mCitiesListView = (ListView) findViewById(R.id.chooser_list);
-                mCitiesListView.setAdapter(mCitiesAdapter);
-                mCitiesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        mCitiesAdapter.selectItem(position);
-                    }
-                });
-            } else {
-                fail(null);
-            }
+            mCitiesListView = (ListView) findViewById(R.id.chooser_list);
+            mCitiesListView.setAdapter(mCitiesAdapter);
+            mCitiesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    mCitiesAdapter.selectItem(position);
+                }
+            });
+        } else {
+            fail(null);
+        }
 
         end();
-        }
+    }
 
     @Override
     public void onFailure(Throwable t) {

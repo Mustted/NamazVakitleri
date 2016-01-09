@@ -18,7 +18,7 @@ class CountiesAdapter(ctx: Context, resource: Int, val items: List<County>) : Ar
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var view = convertView
         if (view == null) {
-            view = super.getView(position, convertView, parent)
+            view = LayoutInflater.from(context).inflate(R.layout.item_radio, parent, false)
             view!!
         }
 

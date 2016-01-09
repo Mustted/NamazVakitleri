@@ -1,10 +1,12 @@
 package tr.xip.prayertimes.ui.adapter
 
 import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import kotlinx.android.synthetic.main.item_radio.view.*
+import tr.xip.prayertimes.R
 import tr.xip.prayertimes.model.Country
 
 class CountriesAdapter(ctx: Context, resource: Int, val items: List<Country>) : ArrayAdapter<Country>(ctx, resource, items) {
@@ -15,7 +17,7 @@ class CountriesAdapter(ctx: Context, resource: Int, val items: List<Country>) : 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var view = convertView
         if (view == null) {
-            view = super.getView(position, convertView, parent)
+            view = LayoutInflater.from(context).inflate(R.layout.item_radio, parent, false)
             view!!
         }
 

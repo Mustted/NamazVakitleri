@@ -34,14 +34,14 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:recyclerview-v7:23.1.1'
     compile 'com.android.support:cardview-v7:23.1.1'
-    compile 'com.google.android.gms:play-services:8.3.0'
     compile 'com.squareup.retrofit:retrofit:2.0.0-beta1'
     compile 'com.squareup.retrofit:converter-gson:2.0.0-beta1'
-    compile 'com.github.castorflex.smoothprogressbar:library:1.2.0'
+    compile 'com.github.castorflex.smoothprogressbar:library:1.1.0'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 //    wearApp project(':wear')
 }
 buildscript {
-    ext.kotlin_version = '1.0.0-beta-1103'
+    ext.kotlin_version = '1.0.0-beta-4584'
     repositories {
         mavenCentral()
     }

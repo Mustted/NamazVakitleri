@@ -7,7 +7,7 @@
     android:foreground="@drawable/selector_accent_oval">
 
     <ImageView
-        android:id="@+id/widget_notifications_indicator"
+        android:id="@+id/indicator"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:background="@drawable/oval_gray_light"

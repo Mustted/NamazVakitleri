@@ -5,11 +5,10 @@
     android:layout_marginLeft="-2dp"
     android:layout_marginRight="-2dp"
     android:background="@color/background_window"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+    android:orientation="vertical">
 
     <ViewFlipper
-        android:id="@+id/prayer_times_flipper"
+        android:id="@+id/flipper"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:inAnimation="@anim/abc_fade_in"
@@ -17,7 +16,7 @@
         tools:ignore="PrivateResource">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/prayer_times_recycler"
+            android:id="@+id/recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipToPadding="false"

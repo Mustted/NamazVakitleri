@@ -14,14 +14,13 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Spinner
 
-import kotlinx.android.synthetic.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.*
 
 import tr.xip.prayertimes.R
-import tr.xip.prayertimes.Utils
-import tr.xip.prayertimes.api.objects.Location
+import tr.xip.prayertimes.model.Location
 import tr.xip.prayertimes.db.DatabaseManager
-import tr.xip.prayertimes.ui.activty.CountryChooserActivity
-import tr.xip.prayertimes.ui.apdater.LocationsSpinnerAdapter
+import tr.xip.prayertimes.ext.toPx
+import tr.xip.prayertimes.ui.adapter.LocationsSpinnerAdapter
 import tr.xip.prayertimes.ui.fragment.PrayerTimesFragment
 import tr.xip.prayertimes.ui.widget.OnItemSelectedListenerAdapter
 import tr.xip.prayertimes.util.LocationsList
@@ -45,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
 
-        toolbar.setContentInsetsAbsolute(Utils.dpToPx(8f), toolbar.contentInsetRight)
+        toolbar.setContentInsetsAbsolute(8.toPx(), toolbar.contentInsetRight)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
@@ -87,8 +86,10 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun setContent(location: Location) {
-        supportFragmentManager.beginTransaction().replace(R.id.container, PrayerTimesFragment.newInstance(location)).commit()
+    private fun setContent(location: Location?) {
+        if (location != null) {
+            supportFragmentManager.beginTransaction().replace(R.id.container, PrayerTimesFragment.newInstance(location)).commit()
+        }
     }
 
     private fun notifyChange() {

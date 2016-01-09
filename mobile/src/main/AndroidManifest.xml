@@ -6,7 +6,7 @@
 
     <application
         android:allowBackup="true"
-        android:name=".ui.app.NamazVakitleriApplication"
+        android:name=".app.NamazVakitleriApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
@@ -22,13 +22,13 @@
         </activity>
 
         <activity
-            android:name=".ui.activty.CountryChooserActivity" />
+            android:name=".ui.activity.CountryChooserActivity" />
 
         <activity
-            android:name=".ui.activty.CityChooserActivity" />
+            android:name=".ui.activity.CityChooserActivity" />
 
         <activity
-            android:name=".ui.activty.CountyChooserActivity" />
+            android:name=".ui.activity.CountyChooserActivity" />
     </application>
 
 </manifest>

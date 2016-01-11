@@ -10,43 +10,56 @@ import retrofit.Callback
 import retrofit.Response
 import tr.xip.prayertimes.R
 import tr.xip.prayertimes.client.DiyanetClient
-import tr.xip.prayertimes.model.City
+import tr.xip.prayertimes.model.State
 import tr.xip.prayertimes.model.Country
+import tr.xip.prayertimes.model.City
+import tr.xip.prayertimes.model.Location
+import tr.xip.prayertimes.db.DatabaseManager
 import tr.xip.prayertimes.ui.adapter.CitiesAdapter
 import java.util.*
 
 class CityChooserActivity : AppCompatActivity(), Callback<List<City>> {
     private var citiesAdapter: CitiesAdapter? = null
 
-    private var citiesList: List<City> = ArrayList()
+    private var citiesList: List<City>? = ArrayList()
 
     private var country: Country? = null
+    private var state: State? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         overridePendingTransition(R.anim.fade_in, R.anim.nothing)
         setContentView(R.layout.activity_list_chooser)
 
+        val intent = intent
         country = intent.getSerializableExtra(ARG_COUNTRY) as Country
+        state = intent.getSerializableExtra(ARG_CITY) as State
 
-        chooserTitle.text = getString(R.string.choose_your_city)
+        chooserTitle.text = getString(R.string.choose_your_county)
 
         previous.setOnClickListener { goBack() }
+
         next.setOnClickListener {
             if (citiesAdapter != null) {
-                val city = citiesAdapter!!.selectedCity
-                val intent = Intent(this@CityChooserActivity, CountyChooserActivity::class.java)
-                intent.putExtra(CountyChooserActivity.ARG_COUNTRY, country)
-                intent.putExtra(CountyChooserActivity.ARG_CITY, city)
-                startActivity(intent)
-                finish()
+                saveValuesAndExit(citiesAdapter!!.selectedCity)
             }
         }
 
-
-        if (country != null && country!!.id != null) {
-            DiyanetClient.getCitiesForCountry(country!!.id!!).enqueue(this)
+        if (state != null && state!!.id != null) {
+            DiyanetClient.getCitiesForState(state!!.id!!).enqueue(this)
         }
+    }
+
+    private fun saveValuesAndExit(county: City? = null) {
+        DatabaseManager.addLocation(Location(
+                country?.id,
+                country?.name,
+                state?.id,
+                state?.name,
+                county?.id,
+                county?.name))
+        startActivity(Intent(this@CityChooserActivity, MainActivity::class.java))
+        finish()
     }
 
     override fun onBackPressed() {
@@ -59,38 +72,45 @@ class CityChooserActivity : AppCompatActivity(), Callback<List<City>> {
     }
 
     private fun goBack() {
-        startActivity(Intent(this@CityChooserActivity, CountryChooserActivity::class.java))
+        val intent = Intent(this@CityChooserActivity, StateChooserActivity::class.java)
+        intent.putExtra(StateChooserActivity.ARG_COUNTRY, country)
+        startActivity(intent)
         finish()
     }
 
-    override fun onResponse(response: Response<List<City>>?) {
-        if (response?.body() != null) {
+    override fun onResponse(response: Response<List<City>>) {
+        citiesList = response.body()
+
+        var countiesExist = false
+
+        if (citiesList != null) {
+            countiesExist = !(citiesList!!.size <= 1 && citiesList!![0].error != null)
+        }
+
+        if (countiesExist) {
             citiesAdapter = CitiesAdapter(this@CityChooserActivity,
-                    R.layout.item_radio, citiesList)
+                    R.layout.item_radio, citiesList as List<City>)
 
             list.adapter = citiesAdapter
-            list.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l -> citiesAdapter!!.selectItem(i) }
+            list.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id -> citiesAdapter!!.selectItem(position) }
         } else {
-            fail(null)
+            saveValuesAndExit()
         }
 
         end()
     }
 
     override fun onFailure(t: Throwable) {
-        fail(null)
-    }
-
-    private fun fail(response: Response<Any>?) {
         // TODO
         end()
     }
 
     private fun end() {
-        progressBar.visibility = View.INVISIBLE
+//        list.visibility = View.INVISIBLE
     }
 
     companion object {
         val ARG_COUNTRY = "arg_country"
+        val ARG_CITY = "arg_city"
     }
 }

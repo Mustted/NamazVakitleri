@@ -5,6 +5,7 @@ import java.io.Serializable
 class Country : Serializable {
     var databaseId: Int = 0
         internal set
+
     var id: String? = null
     var name: String? = null
 

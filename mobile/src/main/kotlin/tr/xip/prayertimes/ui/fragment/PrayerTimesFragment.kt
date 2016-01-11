@@ -7,7 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fragment_prayer_times.*
+import kotlinx.android.synthetic.main.fragment_prayer_times.view.*
 
 import java.util.Calendar
 
@@ -35,17 +35,17 @@ class PrayerTimesFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val rootView = inflater.inflate(R.layout.fragment_prayer_times, null)
+        return inflater.inflate(R.layout.fragment_prayer_times, null)
+    }
 
-        recycler.layoutManager = LinearLayoutManager(context)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        view.recycler.layoutManager = LinearLayoutManager(context)
 
         if (prayerTimes != null) {
             displayPrayerTimes()
         } else {
             LoadPrayerTimesForTodayTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
         }
-
-        return rootView
     }
 
     override fun onResume() {
@@ -63,14 +63,10 @@ class PrayerTimesFragment : Fragment() {
         outState.putSerializable(STATE_PRAYER_TIMES, prayerTimes)
     }
 
-    private fun locationHasCountyValue(): Boolean {
-        return location?.countyId != null
-    }
-
     private fun displayPrayerTimes() {
         if (prayerTimes != null) {
             adapter = PrayerTimesAdapter(prayerTimes!!.prayerTimesList)
-            recycler.adapter = adapter
+            view.recycler.adapter = adapter
             // TODO: Implementation
             // recycler.smoothScrollToPosition(adapter.currentPrayerTimePosition)
         }
@@ -80,7 +76,7 @@ class PrayerTimesFragment : Fragment() {
 
         override fun onPreExecute() {
             super.onPreExecute()
-            flipper.displayedChild = FLIPPER_PROGRESS_BAR
+            view.flipper.displayedChild = FLIPPER_PROGRESS_BAR
         }
 
         override fun doInBackground(vararg params: Void): Boolean? {
@@ -105,21 +101,16 @@ class PrayerTimesFragment : Fragment() {
             if (success) {
                 displayPrayerTimes()
             } else {
-                flipper.displayedChild = FLIPPER_PROGRESS_BAR
+                view.flipper.displayedChild = FLIPPER_PROGRESS_BAR
 
-                if (locationHasCountyValue()) {
-                    DiyanetClient.getPrayerTimesForCounty(
-                            location!!.countryId!!,
-                            location!!.cityId!!,
-                            location!!.countyId!!).enqueue(PrayerTimesListCallback())
-                } else {
-                    DiyanetClient.getPrayerTimesForCity(
-                            location!!.countryId!!,
-                            location!!.cityId!!).enqueue(PrayerTimesListCallback())
-                }
+                DiyanetClient.getPrayerTimesForMonth(
+                        location!!.countryId!!,
+                        location!!.cityId!!,
+                        location!!.countyId
+                ).enqueue(PrayerTimesListCallback())
             }
 
-            flipper.displayedChild = FLIPPER_CONTENT
+            view.flipper.displayedChild = FLIPPER_CONTENT
         }
 
         private inner class PrayerTimesListCallback : Callback<List<PrayerTimes>> {
@@ -134,7 +125,7 @@ class PrayerTimesFragment : Fragment() {
                     fail(response)
                 }
 
-                flipper.displayedChild = FLIPPER_CONTENT
+                view.flipper.displayedChild = FLIPPER_CONTENT
             }
 
             override fun onFailure(t: Throwable) {
@@ -147,7 +138,7 @@ class PrayerTimesFragment : Fragment() {
             }
 
             private fun end() {
-                flipper.displayedChild = FLIPPER_CONTENT
+                view.flipper.displayedChild = FLIPPER_CONTENT
             }
         }
     }

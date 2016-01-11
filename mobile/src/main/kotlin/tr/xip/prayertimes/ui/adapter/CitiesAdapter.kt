@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import kotlinx.android.synthetic.main.item_radio.view.*
+
 import tr.xip.prayertimes.R
 import tr.xip.prayertimes.model.City
 

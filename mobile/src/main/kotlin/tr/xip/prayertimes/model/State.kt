@@ -2,22 +2,20 @@ package tr.xip.prayertimes.model
 
 import java.io.Serializable
 
-class City : Serializable {
+class State : Serializable {
     var databaseId: Int? = null
         internal set
 
     var id: String? = null
     var name: String? = null
 
-    val error: String? = null
-
-    constructor(databaseId: Int, id: String, name: String) {
-        this.databaseId = databaseId
+    constructor(id: String, name: String) {
         this.id = id
         this.name = name
     }
 
-    constructor(id: String, name: String) {
+    constructor(databaseId: Int, id: String, name: String) {
+        this.databaseId = databaseId
         this.id = id
         this.name = name
     }

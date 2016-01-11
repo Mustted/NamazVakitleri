@@ -2,31 +2,39 @@ package tr.xip.prayertimes.client
 
 import retrofit.Call
 import retrofit.http.GET
-import retrofit.http.Query
+import retrofit.http.Path
+import tr.xip.prayertimes.model.State
 import tr.xip.prayertimes.model.City
-import tr.xip.prayertimes.model.County
 import tr.xip.prayertimes.model.PrayerTimes
 
 interface DiyanetService {
 
-    @GET("index.php?islem=getSehirList")
-    fun getCitiesForCountry(
-            @Query("ulke_id") id: String): Call<List<City>>
+    @GET("country")
+    fun getCountries()
 
-    @GET("index.php?islem=getIlceList")
-    fun getCountiesListForCity(
-            @Query("sehir_id") id: String): Call<List<County>>
+    @GET("state/{id_country}")
+    fun getStatesForCountry(
+            @Path("id_country") id: String): Call<List<State>>
 
-    @GET("index.php?islem=getNamazVakitleri")
-    fun getPrayerTimesForCity(
-            @Query("ulke_id") countryId: String,
-            @Query("sehir_id") cityId: String,
-            @Query("periyot") period: String): Call<List<PrayerTimes>>
+    @GET("city/{id_state}")
+    fun getCitiesForState(
+            @Path("id_state") id: String): Call<List<City>>
 
-    @GET("index.php?islem=getNamazVakitleri")
-    fun getPrayerTimesForCounty(
-            @Query("ulke_id") countryId: String,
-            @Query("sehir_id") cityId: String,
-            @Query("ilce_id") countyId: String,
-            @Query("periyot") period: String): Call<List<PrayerTimes>>
+    @GET("day/{id_country}/{id_state}/{id_city}")
+    fun getPrayerTimesForDay(
+            @Path("id_country") countryId: String,
+            @Path("id_state") stateId: String,
+            @Path("id_city") cityId: String): Call<List<PrayerTimes>>
+
+    @GET("week/{id_country}/{id_state}/{id_city}")
+    fun getPrayerTimesForWeek(
+            @Path("id_country") countryId: String,
+            @Path("id_state") stateId: String,
+            @Path("id_city") cityId: String): Call<List<PrayerTimes>>
+
+    @GET("month/{id_country}/{id_state}/{id_city}")
+    fun getPrayerTimesForMonth(
+            @Path("id_country") countryId: String,
+            @Path("id_state") stateId: String,
+            @Path("id_city") cityId: String): Call<List<PrayerTimes>>
 }

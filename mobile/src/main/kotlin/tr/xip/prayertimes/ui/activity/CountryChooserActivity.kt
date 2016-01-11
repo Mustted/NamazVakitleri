@@ -41,8 +41,8 @@ class CountryChooserActivity : AppCompatActivity() {
 
         next.setOnClickListener {
             val country = countriesAdapter!!.selectedCountry
-            val intent = Intent(this@CountryChooserActivity, CityChooserActivity::class.java)
-            intent.putExtra(CityChooserActivity.ARG_COUNTRY, country)
+            val intent = Intent(this@CountryChooserActivity, StateChooserActivity::class.java)
+            intent.putExtra(StateChooserActivity.ARG_COUNTRY, country)
             startActivity(intent)
             finish()
         }

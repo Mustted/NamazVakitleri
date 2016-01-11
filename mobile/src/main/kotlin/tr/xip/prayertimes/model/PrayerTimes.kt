@@ -5,31 +5,29 @@ import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 import java.util.ArrayList
 
-import tr.xip.prayertimes.model.PrayerTime
-
 class PrayerTimes(val date: Long, fajr: Long, sunrise: Long, dhuhr: Long, asr: Long, maghrib: Long, isha: Long) : Serializable {
-    @SerializedName("Tarih")
+    @SerializedName("tarih")
     private val dateString: String? = null
 
-    @SerializedName("Imsak")
+    @SerializedName("imsak")
     private val fajrString: String? = null
 
-    @SerializedName("Gunes")
+    @SerializedName("gunes")
     private val sunriseString: String? = null
 
-    @SerializedName("Ogle")
+    @SerializedName("ogle")
     private val dhuhrString: String? = null
 
-    @SerializedName("Ikindi")
+    @SerializedName("ikindi")
     private val asrString: String? = null
 
-    @SerializedName("Aksam")
+    @SerializedName("aksam")
     private val maghribString: String? = null
 
-    @SerializedName("Yatsi")
+    @SerializedName("yatsi")
     private val ishaString: String? = null
 
-    @SerializedName("Kible")
+    @SerializedName("kible")
     val qibla: String? = null
 
     val fajrPrayerTime: PrayerTime?

@@ -25,10 +25,10 @@
             android:name=".ui.activity.CountryChooserActivity" />
 
         <activity
-            android:name=".ui.activity.CityChooserActivity" />
+            android:name=".ui.activity.StateChooserActivity" />
 
         <activity
-            android:name=".ui.activity.CountyChooserActivity" />
+            android:name=".ui.activity.CityChooserActivity" />
     </application>
 
 </manifest>

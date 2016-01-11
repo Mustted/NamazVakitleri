@@ -6,13 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import kotlinx.android.synthetic.main.item_radio.view.*
-
 import tr.xip.prayertimes.R
-import tr.xip.prayertimes.model.County
+import tr.xip.prayertimes.model.State
 
-class CountiesAdapter(ctx: Context, resource: Int, val items: List<County>) : ArrayAdapter<County>(ctx, resource, items) {
+class StatesAdapter(ctx: Context, resource: Int, val items: List<State>) : ArrayAdapter<State>(ctx, resource, items) {
     private var selectedPosition = 0
-    val selectedCounty: County
+    val selectedState: State
         get() = items[selectedPosition]
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
